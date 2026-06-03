@@ -8,7 +8,6 @@ type BoardProps = {
   opponent: AreaBoard;
   self: AreaBoard;
   mode: PracticeMode;
-  fudaWidth: number;
   interactive?: boolean;
   onCardClick?: (card: BoardCard, camp: "opponent" | "self") => void;
 };
@@ -17,14 +16,12 @@ function BoardArea({
   areaId,
   areaBoard,
   camp,
-  fudaWidth,
   interactive,
   onCardClick,
 }: {
   areaId: AreaId;
   areaBoard: AreaBoard;
   camp: "opponent" | "self";
-  fudaWidth: number;
   interactive?: boolean;
   onCardClick?: (card: BoardCard, camp: "opponent" | "self") => void;
 }) {
@@ -47,7 +44,11 @@ function BoardArea({
             onClick={() => onCardClick?.(card, camp)}
             aria-label={card.faceUp ? card.poem.kimariji : "裏向きの札"}
           >
-            <FudaImage src={src} alt={card.poem.kimariji} displayWidth={fudaWidth} />
+            <FudaImage
+              src={src}
+              alt={card.poem.kimariji}
+              boardSized
+            />
           </button>
         );
       })}
@@ -65,7 +66,6 @@ export function Board({
   opponent,
   self,
   mode,
-  fudaWidth,
   interactive,
   onCardClick,
 }: BoardProps) {
@@ -82,7 +82,6 @@ export function Board({
                 areaId={row.right}
                 areaBoard={opponent}
                 camp="opponent"
-                fudaWidth={fudaWidth}
                 interactive={interactive}
                 onCardClick={onCardClick}
               />
@@ -90,7 +89,6 @@ export function Board({
                 areaId={row.left}
                 areaBoard={opponent}
                 camp="opponent"
-                fudaWidth={fudaWidth}
                 interactive={interactive}
                 onCardClick={onCardClick}
               />
@@ -109,7 +107,6 @@ export function Board({
                 areaId={row.left}
                 areaBoard={self}
                 camp="self"
-                fudaWidth={fudaWidth}
                 interactive={interactive}
                 onCardClick={onCardClick}
               />
@@ -117,7 +114,6 @@ export function Board({
                 areaId={row.right}
                 areaBoard={self}
                 camp="self"
-                fudaWidth={fudaWidth}
                 interactive={interactive}
                 onCardClick={onCardClick}
               />

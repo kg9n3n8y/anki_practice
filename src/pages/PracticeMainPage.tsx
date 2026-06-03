@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState, type CSSProperties } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Board } from "../components/Board";
 import { fudalist } from "../data/fudalist";
@@ -12,12 +12,11 @@ import {
   setAllFaceDown,
 } from "../lib/placement";
 import { buildQuestionList } from "../lib/quiz";
-import { modeLabel } from "../lib/poemImage";
 import { loadTeigi, appendResult } from "../lib/storage";
 import type { GeneratedBoard } from "../types/board";
 import type { BoardCard } from "../types/board";
 import type { FeedbackKind, PracticePhase } from "../types/board";
-import { fudaDisplayWidth } from "../lib/fudaDisplaySize";
+import { useBoardFudaWidth } from "../hooks/useBoardFudaWidth";
 import type { Poem, PracticeSettings } from "../types";
 
 type LocationState = {
@@ -49,15 +48,8 @@ export function PracticeMainPage() {
   const [confirmStartedAt, setConfirmStartedAt] = useState<number | null>(null);
   const [confirmSeconds, setConfirmSeconds] = useState(0);
   const [answering, setAnswering] = useState(false);
-  const [viewportWidth, setViewportWidth] = useState(() =>
-    typeof window !== "undefined" ? window.innerWidth : 960,
-  );
-
-  useEffect(() => {
-    const onResize = () => setViewportWidth(window.innerWidth);
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, []);
+  const [cancelConfirmOpen, setCancelConfirmOpen] = useState(false);
+  const { containerRef, fudaWidth } = useBoardFudaWidth();
 
   useEffect(() => {
     if (!settings) {
@@ -173,7 +165,9 @@ export function PracticeMainPage() {
     );
   }
 
-  const fudaWidth = fudaDisplayWidth(settings.cardCount, viewportWidth);
+  const boardStyle = {
+    "--fuda-w": `${fudaWidth}px`,
+  } as CSSProperties;
   const currentQuestion = questions[questionIndex];
   const mm = Math.floor(secondsLeft / 60);
   const ss = secondsLeft % 60;
@@ -202,66 +196,94 @@ export function PracticeMainPage() {
   }
 
   return (
-    <div className="practice-main">
+    <div className="practice-main" style={boardStyle}>
       <div className="practice-toolbar app-card">
-        {phase === "memorize" && (
-          <>
-            <span className="timer">
-              残り {mm}:{ss.toString().padStart(2, "0")}
-            </span>
-            <button
-              type="button"
-              className="app-button"
-              onClick={() => beginConfirm(board)}
-            >
-              完了
-            </button>
-          </>
-        )}
-        {phase === "confirm" && currentQuestion && (
-          <>
-            <div className="confirm-prompt">
-              <span className="confirm-label">決まり字</span>
-              <strong className="confirm-kimariji">{currentQuestion.kimariji}</strong>
-            </div>
-            <button
-              type="button"
-              className="app-button secondary"
-              disabled={answering}
-              onClick={() => handleAnswer("none")}
-            >
-              なし
-            </button>
-            {feedback && (
-              <span
-                className={`feedback feedback--${feedback}`}
-                role="status"
-              >
-                {feedback === "correct" ? "⭕️" : "❌"}
-                {feedbackMessage && ` ${feedbackMessage}`}
+        <div className="practice-toolbar-main">
+          {phase === "memorize" && (
+            <>
+              <span className="timer">
+                残り {mm}:{ss.toString().padStart(2, "0")}
               </span>
-            )}
-          </>
-        )}
-        <Link to="/practice/start" className="app-button secondary">
+              <button
+                type="button"
+                className="app-button"
+                onClick={() => beginConfirm(board)}
+              >
+                完了
+              </button>
+            </>
+          )}
+          {phase === "confirm" && currentQuestion && (
+            <>
+              <div className="confirm-prompt">
+                <span className="confirm-label">決まり字</span>
+                <strong className="confirm-kimariji">
+                  {currentQuestion.kimariji}
+                </strong>
+              </div>
+              <button
+                type="button"
+                className="app-button secondary"
+                disabled={answering}
+                onClick={() => handleAnswer("none")}
+              >
+                なし
+              </button>
+              {feedback && (
+                <span
+                  className={`feedback feedback--${feedback}`}
+                  role="status"
+                >
+                  {feedback === "correct" ? "⭕️" : "❌"}
+                  {feedbackMessage && ` ${feedbackMessage}`}
+                </span>
+              )}
+            </>
+          )}
+        </div>
+        <button
+          type="button"
+          className="app-button secondary practice-toolbar-cancel"
+          onClick={() => setCancelConfirmOpen(true)}
+        >
           中止
-        </Link>
+        </button>
       </div>
 
-      <Board
-        opponent={board.opponent}
-        self={board.self}
-        mode={settings.mode}
-        fudaWidth={fudaWidth}
-        interactive={phase === "confirm"}
-        onCardClick={(card) => handleAnswer(card)}
-      />
+      {cancelConfirmOpen && (
+        <div className="modal-backdrop" role="dialog" aria-modal="true">
+          <div className="modal app-card">
+            <h2>練習を中止しますか？</h2>
+            <p>現在の進行状況は保存されません。</p>
+            <div className="app-nav">
+              <button
+                type="button"
+                className="app-button"
+                onClick={() => navigate("/practice/start")}
+              >
+                中止する
+              </button>
+              <button
+                type="button"
+                className="secondary"
+                onClick={() => setCancelConfirmOpen(false)}
+              >
+                続ける
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
-      <p className="practice-meta app-placeholder">
-        {modeLabel(settings.mode)} / {settings.cardCount}枚
-        {phase === "confirm" &&
-          ` / 表 ${countFaceUp(board)} / ${countOnBoard(board)}`}
-      </p>
+      <div ref={containerRef} className="practice-board-wrap">
+        <Board
+          opponent={board.opponent}
+          self={board.self}
+          mode={settings.mode}
+          interactive={phase === "confirm"}
+          onCardClick={(card) => handleAnswer(card)}
+        />
+      </div>
     </div>
   );
 }
