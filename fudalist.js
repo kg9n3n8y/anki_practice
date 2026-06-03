@@ -4,8 +4,6 @@ const fudalist = [
         kimariji: "あきの",
         normal: "./torifuda/tori_1.png",
         reverse: "./torifuda/tori_r_1.png",
-        classification: "16枚札　あ",
-        goroImage: "089.png",
         order: 89
     },
     {
@@ -13,8 +11,6 @@ const fudalist = [
         kimariji: "はるす",
         normal: "./torifuda/tori_2.png",
         reverse: "./torifuda/tori_r_2.png",
-        classification: "4枚札　はやよか",
-        goroImage: "030.png",
         order: 30
     },
     {
@@ -22,8 +18,6 @@ const fudalist = [
         kimariji: "あし",
         normal: "./torifuda/tori_3.png",
         reverse: "./torifuda/tori_r_3.png",
-        classification: "16枚札　あ",
-        goroImage: "098.png",
         order: 98
     },
     {
@@ -31,8 +25,6 @@ const fudalist = [
         kimariji: "たご",
         normal: "./torifuda/tori_4.png",
         reverse: "./torifuda/tori_r_4.png",
-        classification: "6枚札　たこ",
-        goroImage: "053.png",
         order: 53
     },
     {
@@ -40,8 +32,6 @@ const fudalist = [
         kimariji: "おく",
         normal: "./torifuda/tori_5.png",
         reverse: "./torifuda/tori_r_5.png",
-        classification: "7枚札　おわ",
-        goroImage: "063.png",
         order: 63
     },
     {
@@ -49,8 +39,6 @@ const fudalist = [
         kimariji: "かさ",
         normal: "./torifuda/tori_6.png",
         reverse: "./torifuda/tori_r_6.png",
-        classification: "4枚札　はやよか",
-        goroImage: "043.png",
         order: 43
     },
     {
@@ -58,8 +46,6 @@ const fudalist = [
         kimariji: "あまの",
         normal: "./torifuda/tori_7.png",
         reverse: "./torifuda/tori_r_7.png",
-        classification: "16枚札　あ",
-        goroImage: "092.png",
         order: 92
     },
     {
@@ -67,8 +53,6 @@ const fudalist = [
         kimariji: "わがい",
         normal: "./torifuda/tori_8.png",
         reverse: "./torifuda/tori_r_8.png",
-        classification: "7枚札　おわ",
-        goroImage: "071.png",
         order: 71
     },
     {
@@ -76,8 +60,6 @@ const fudalist = [
         kimariji: "はなの",
         normal: "./torifuda/tori_9.png",
         reverse: "./torifuda/tori_r_9.png",
-        classification: "4枚札　はやよか",
-        goroImage: "033.png",
         order: 33
     },
     {
@@ -85,8 +67,6 @@ const fudalist = [
         kimariji: "これ",
         normal: "./torifuda/tori_10.png",
         reverse: "./torifuda/tori_r_10.png",
-        classification: "6枚札　たこ",
-        goroImage: "057.png",
         order: 57
     },
     {
@@ -94,8 +74,6 @@ const fudalist = [
         kimariji: "わたのはらや",
         normal: "./torifuda/tori_11.png",
         reverse: "./torifuda/tori_r_11.png",
-        classification: "7枚札　おわ",
-        goroImage: "075.png",
         order: 75
     },
     {
@@ -103,8 +81,6 @@ const fudalist = [
         kimariji: "あまつ",
         normal: "./torifuda/tori_12.png",
         reverse: "./torifuda/tori_r_12.png",
-        classification: "16枚札　あ",
-        goroImage: "091.png",
         order: 91
     },
     {
@@ -112,8 +88,6 @@ const fudalist = [
         kimariji: "つく",
         normal: "./torifuda/tori_13.png",
         reverse: "./torifuda/tori_r_13.png",
-        classification: "2枚札　うつしもゆ",
-        goroImage: "011.png",
         order: 11
     },
     {
@@ -121,8 +95,6 @@ const fudalist = [
         kimariji: "みち",
         normal: "./torifuda/tori_14.png",
         reverse: "./torifuda/tori_r_14.png",
-        classification: "5枚札　み",
-        goroImage: "046.png",
         order: 46
     },
     {
@@ -130,8 +102,6 @@ const fudalist = [
         kimariji: "きみがためは",
         normal: "./torifuda/tori_15.png",
         reverse: "./torifuda/tori_r_15.png",
-        classification: "3枚札　いちひき",
-        goroImage: "028.png",
         order: 28
     },
     {
@@ -139,8 +109,6 @@ const fudalist = [
         kimariji: "たち",
         normal: "./torifuda/tori_16.png",
         reverse: "./torifuda/tori_r_16.png",
-        classification: "6枚札　たこ",
-        goroImage: "052.png",
         order: 52
     },
     {
@@ -148,8 +116,6 @@ const fudalist = [
         kimariji: "ちは",
         normal: "./torifuda/tori_17.png",
         reverse: "./torifuda/tori_r_17.png",
-        classification: "3枚札　いちひき",
-        goroImage: "021.png",
         order: 21
     },
     {
@@ -157,8 +123,6 @@ const fudalist = [
         kimariji: "す",
         normal: "./torifuda/tori_18.png",
         reverse: "./torifuda/tori_r_18.png",
-        classification: "1枚札　むすめふさほせ",
-        goroImage: "002.png",
         order: 2
     },
     {
@@ -166,8 +130,6 @@ const fudalist = [
         kimariji: "なにわが",
         normal: "./torifuda/tori_19.png",
         reverse: "./torifuda/tori_r_19.png",
-        classification: "8枚札　な",
-        goroImage: "083.png",
         order: 83
     },
     {
@@ -175,8 +137,6 @@ const fudalist = [
         kimariji: "わび",
         normal: "./torifuda/tori_20.png",
         reverse: "./torifuda/tori_r_20.png",
-        classification: "7枚札　おわ",
-        goroImage: "070.png",
         order: 70
     },
     {
@@ -184,8 +144,6 @@ const fudalist = [
         kimariji: "いまこ",
         normal: "./torifuda/tori_21.png",
         reverse: "./torifuda/tori_r_21.png",
-        classification: "3枚札　いちひき",
-        goroImage: "020.png",
         order: 20
     },
     {
@@ -193,8 +151,6 @@ const fudalist = [
         kimariji: "ふ",
         normal: "./torifuda/tori_22.png",
         reverse: "./torifuda/tori_r_22.png",
-        classification: "1枚札　むすめふさほせ",
-        goroImage: "004.png",
         order: 4
     },
     {
@@ -202,8 +158,6 @@ const fudalist = [
         kimariji: "つき",
         normal: "./torifuda/tori_23.png",
         reverse: "./torifuda/tori_r_23.png",
-        classification: "2枚札　うつしもゆ",
-        goroImage: "010.png",
         order: 10
     },
     {
@@ -211,8 +165,6 @@ const fudalist = [
         kimariji: "この",
         normal: "./torifuda/tori_24.png",
         reverse: "./torifuda/tori_r_24.png",
-        classification: "6枚札　たこ",
-        goroImage: "059.png",
         order: 59
     },
     {
@@ -220,8 +172,6 @@ const fudalist = [
         kimariji: "なにし",
         normal: "./torifuda/tori_25.png",
         reverse: "./torifuda/tori_r_25.png",
-        classification: "8枚札　な",
-        goroImage: "082.png",
         order: 82
     },
     {
@@ -229,8 +179,6 @@ const fudalist = [
         kimariji: "おぐ",
         normal: "./torifuda/tori_26.png",
         reverse: "./torifuda/tori_r_26.png",
-        classification: "7枚札　おわ",
-        goroImage: "066.png",
         order: 66
     },
     {
@@ -238,8 +186,6 @@ const fudalist = [
         kimariji: "みかの",
         normal: "./torifuda/tori_27.png",
         reverse: "./torifuda/tori_r_27.png",
-        classification: "5枚札　み",
-        goroImage: "050.png",
         order: 50
     },
     {
@@ -247,8 +193,6 @@ const fudalist = [
         kimariji: "やまざ",
         normal: "./torifuda/tori_28.png",
         reverse: "./torifuda/tori_r_28.png",
-        classification: "4枚札　はやよか",
-        goroImage: "037.png",
         order: 37
     },
     {
@@ -256,8 +200,6 @@ const fudalist = [
         kimariji: "こころあ",
         normal: "./torifuda/tori_29.png",
         reverse: "./torifuda/tori_r_29.png",
-        classification: "6枚札　たこ",
-        goroImage: "061.png",
         order: 61
     },
     {
@@ -265,8 +207,6 @@ const fudalist = [
         kimariji: "ありあ",
         normal: "./torifuda/tori_30.png",
         reverse: "./torifuda/tori_r_30.png",
-        classification: "16枚札　あ",
-        goroImage: "094.png",
         order: 94
     },
     {
@@ -274,8 +214,6 @@ const fudalist = [
         kimariji: "あさぼらけあ",
         normal: "./torifuda/tori_31.png",
         reverse: "./torifuda/tori_r_31.png",
-        classification: "16枚札　あ",
-        goroImage: "096.png",
         order: 96
     },
     {
@@ -283,8 +221,6 @@ const fudalist = [
         kimariji: "やまが",
         normal: "./torifuda/tori_32.png",
         reverse: "./torifuda/tori_r_32.png",
-        classification: "4枚札　はやよか",
-        goroImage: "036.png",
         order: 36
     },
     {
@@ -292,8 +228,6 @@ const fudalist = [
         kimariji: "ひさ",
         normal: "./torifuda/tori_33.png",
         reverse: "./torifuda/tori_r_33.png",
-        classification: "3枚札　いちひき",
-        goroImage: "024.png",
         order: 24
     },
     {
@@ -301,8 +235,6 @@ const fudalist = [
         kimariji: "たれ",
         normal: "./torifuda/tori_34.png",
         reverse: "./torifuda/tori_r_34.png",
-        classification: "6枚札　たこ",
-        goroImage: "056.png",
         order: 56
     },
     {
@@ -310,8 +242,6 @@ const fudalist = [
         kimariji: "ひとは",
         normal: "./torifuda/tori_35.png",
         reverse: "./torifuda/tori_r_35.png",
-        classification: "3枚札　いちひき",
-        goroImage: "025.png",
         order: 25
     },
     {
@@ -319,8 +249,6 @@ const fudalist = [
         kimariji: "なつ",
         normal: "./torifuda/tori_36.png",
         reverse: "./torifuda/tori_r_36.png",
-        classification: "8枚札　な",
-        goroImage: "077.png",
         order: 77
     },
     {
@@ -328,8 +256,6 @@ const fudalist = [
         kimariji: "しら",
         normal: "./torifuda/tori_37.png",
         reverse: "./torifuda/tori_r_37.png",
-        classification: "2枚札　うつしもゆ",
-        goroImage: "012.png",
         order: 12
     },
     {
@@ -337,8 +263,6 @@ const fudalist = [
         kimariji: "わすら",
         normal: "./torifuda/tori_38.png",
         reverse: "./torifuda/tori_r_38.png",
-        classification: "7枚札　おわ",
-        goroImage: "074.png",
         order: 74
     },
     {
@@ -346,8 +270,6 @@ const fudalist = [
         kimariji: "あさじ",
         normal: "./torifuda/tori_39.png",
         reverse: "./torifuda/tori_r_39.png",
-        classification: "16枚札　あ",
-        goroImage: "095.png",
         order: 95
     },
     {
@@ -355,8 +277,6 @@ const fudalist = [
         kimariji: "しの",
         normal: "./torifuda/tori_40.png",
         reverse: "./torifuda/tori_r_40.png",
-        classification: "2枚札　うつしもゆ",
-        goroImage: "013.png",
         order: 13
     },
     {
@@ -364,8 +284,6 @@ const fudalist = [
         kimariji: "こい",
         normal: "./torifuda/tori_41.png",
         reverse: "./torifuda/tori_r_41.png",
-        classification: "6枚札　たこ",
-        goroImage: "058.png",
         order: 58
     },
     {
@@ -373,8 +291,6 @@ const fudalist = [
         kimariji: "ちぎりき",
         normal: "./torifuda/tori_42.png",
         reverse: "./torifuda/tori_r_42.png",
-        classification: "3枚札　いちひき",
-        goroImage: "022.png",
         order: 22
     },
     {
@@ -382,8 +298,6 @@ const fudalist = [
         kimariji: "あい",
         normal: "./torifuda/tori_43.png",
         reverse: "./torifuda/tori_r_43.png",
-        classification: "16枚札　あ",
-        goroImage: "099.png",
         order: 99
     },
     {
@@ -391,8 +305,6 @@ const fudalist = [
         kimariji: "おおこ",
         normal: "./torifuda/tori_44.png",
         reverse: "./torifuda/tori_r_44.png",
-        classification: "7枚札　おわ",
-        goroImage: "069.png",
         order: 69
     },
     {
@@ -400,8 +312,6 @@ const fudalist = [
         kimariji: "あわれ",
         normal: "./torifuda/tori_45.png",
         reverse: "./torifuda/tori_r_45.png",
-        classification: "16枚札　あ",
-        goroImage: "086.png",
         order: 86
     },
     {
@@ -409,8 +319,6 @@ const fudalist = [
         kimariji: "ゆら",
         normal: "./torifuda/tori_46.png",
         reverse: "./torifuda/tori_r_46.png",
-        classification: "2枚札　うつしもゆ",
-        goroImage: "017.png",
         order: 17
     },
     {
@@ -418,8 +326,6 @@ const fudalist = [
         kimariji: "やえ",
         normal: "./torifuda/tori_47.png",
         reverse: "./torifuda/tori_r_47.png",
-        classification: "4枚札　はやよか",
-        goroImage: "035.png",
         order: 35
     },
     {
@@ -427,8 +333,6 @@ const fudalist = [
         kimariji: "かぜを",
         normal: "./torifuda/tori_48.png",
         reverse: "./torifuda/tori_r_48.png",
-        classification: "4枚札　はやよか",
-        goroImage: "044.png",
         order: 44
     },
     {
@@ -436,8 +340,6 @@ const fudalist = [
         kimariji: "みかき",
         normal: "./torifuda/tori_49.png",
         reverse: "./torifuda/tori_r_49.png",
-        classification: "5枚札　み",
-        goroImage: "049.png",
         order: 49
     },
     {
@@ -445,8 +347,6 @@ const fudalist = [
         kimariji: "きみがためお",
         normal: "./torifuda/tori_50.png",
         reverse: "./torifuda/tori_r_50.png",
-        classification: "3枚札　いちひき",
-        goroImage: "029.png",
         order: 29
     },
     {
@@ -454,8 +354,6 @@ const fudalist = [
         kimariji: "かく",
         normal: "./torifuda/tori_51.png",
         reverse: "./torifuda/tori_r_51.png",
-        classification: "4枚札　はやよか",
-        goroImage: "042.png",
         order: 42
     },
     {
@@ -463,8 +361,6 @@ const fudalist = [
         kimariji: "あけ",
         normal: "./torifuda/tori_52.png",
         reverse: "./torifuda/tori_r_52.png",
-        classification: "16枚札　あ",
-        goroImage: "100.png",
         order: 100
     },
     {
@@ -472,8 +368,6 @@ const fudalist = [
         kimariji: "なげき",
         normal: "./torifuda/tori_53.png",
         reverse: "./torifuda/tori_r_53.png",
-        classification: "8枚札　な",
-        goroImage: "080.png",
         order: 80
     },
     {
@@ -481,8 +375,6 @@ const fudalist = [
         kimariji: "わすれ",
         normal: "./torifuda/tori_54.png",
         reverse: "./torifuda/tori_r_54.png",
-        classification: "7枚札　おわ",
-        goroImage: "073.png",
         order: 73
     },
     {
@@ -490,8 +382,6 @@ const fudalist = [
         kimariji: "たき",
         normal: "./torifuda/tori_55.png",
         reverse: "./torifuda/tori_r_55.png",
-        classification: "6枚札　たこ",
-        goroImage: "055.png",
         order: 55
     },
     {
@@ -499,8 +389,6 @@ const fudalist = [
         kimariji: "あらざ",
         normal: "./torifuda/tori_56.png",
         reverse: "./torifuda/tori_r_56.png",
-        classification: "16枚札　あ",
-        goroImage: "088.png",
         order: 88
     },
     {
@@ -508,8 +396,6 @@ const fudalist = [
         kimariji: "め",
         normal: "./torifuda/tori_57.png",
         reverse: "./torifuda/tori_r_57.png",
-        classification: "1枚札　むすめふさほせ",
-        goroImage: "003.png",
         order: 3
     },
     {
@@ -517,8 +403,6 @@ const fudalist = [
         kimariji: "ありま",
         normal: "./torifuda/tori_58.png",
         reverse: "./torifuda/tori_r_58.png",
-        classification: "16枚札　あ",
-        goroImage: "093.png",
         order: 93
     },
     {
@@ -526,8 +410,6 @@ const fudalist = [
         kimariji: "やす",
         normal: "./torifuda/tori_59.png",
         reverse: "./torifuda/tori_r_59.png",
-        classification: "4枚札　はやよか",
-        goroImage: "034.png",
         order: 34
     },
     {
@@ -535,8 +417,6 @@ const fudalist = [
         kimariji: "おおえ",
         normal: "./torifuda/tori_60.png",
         reverse: "./torifuda/tori_r_60.png",
-        classification: "7枚札　おわ",
-        goroImage: "067.png",
         order: 67
     },
     {
@@ -544,8 +424,6 @@ const fudalist = [
         kimariji: "いに",
         normal: "./torifuda/tori_61.png",
         reverse: "./torifuda/tori_r_61.png",
-        classification: "3枚札　いちひき",
-        goroImage: "018.png",
         order: 18
     },
     {
@@ -553,8 +431,6 @@ const fudalist = [
         kimariji: "よを",
         normal: "./torifuda/tori_62.png",
         reverse: "./torifuda/tori_r_62.png",
-        classification: "4枚札　はやよか",
-        goroImage: "038.png",
         order: 38
     },
     {
@@ -562,8 +438,6 @@ const fudalist = [
         kimariji: "いまは",
         normal: "./torifuda/tori_63.png",
         reverse: "./torifuda/tori_r_63.png",
-        classification: "3枚札　いちひき",
-        goroImage: "019.png",
         order: 19
     },
     {
@@ -571,8 +445,6 @@ const fudalist = [
         kimariji: "あさぼらけう",
         normal: "./torifuda/tori_64.png",
         reverse: "./torifuda/tori_r_64.png",
-        classification: "16枚札　あ",
-        goroImage: "097.png",
         order: 97
     },
     {
@@ -580,8 +452,6 @@ const fudalist = [
         kimariji: "うら",
         normal: "./torifuda/tori_65.png",
         reverse: "./torifuda/tori_r_65.png",
-        classification: "2枚札　うつしもゆ",
-        goroImage: "009.png",
         order: 9
     },
     {
@@ -589,8 +459,6 @@ const fudalist = [
         kimariji: "もろ",
         normal: "./torifuda/tori_66.png",
         reverse: "./torifuda/tori_r_66.png",
-        classification: "2枚札　うつしもゆ",
-        goroImage: "014.png",
         order: 14
     },
     {
@@ -598,8 +466,6 @@ const fudalist = [
         kimariji: "はるの",
         normal: "./torifuda/tori_67.png",
         reverse: "./torifuda/tori_r_67.png",
-        classification: "4枚札　はやよか",
-        goroImage: "031.png",
         order: 31
     },
     {
@@ -607,8 +473,6 @@ const fudalist = [
         kimariji: "こころに",
         normal: "./torifuda/tori_68.png",
         reverse: "./torifuda/tori_r_68.png",
-        classification: "6枚札　たこ",
-        goroImage: "062.png",
         order: 62
     },
     {
@@ -616,8 +480,6 @@ const fudalist = [
         kimariji: "あらし",
         normal: "./torifuda/tori_69.png",
         reverse: "./torifuda/tori_r_69.png",
-        classification: "16枚札　あ",
-        goroImage: "087.png",
         order: 87
     },
     {
@@ -625,8 +487,6 @@ const fudalist = [
         kimariji: "さ",
         normal: "./torifuda/tori_70.png",
         reverse: "./torifuda/tori_r_70.png",
-        classification: "1枚札　むすめふさほせ",
-        goroImage: "005.png",
         order: 5
     },
     {
@@ -634,8 +494,6 @@ const fudalist = [
         kimariji: "ゆう",
         normal: "./torifuda/tori_71.png",
         reverse: "./torifuda/tori_r_71.png",
-        classification: "2枚札　うつしもゆ",
-        goroImage: "016.png",
         order: 16
     },
     {
@@ -643,8 +501,6 @@ const fudalist = [
         kimariji: "おと",
         normal: "./torifuda/tori_72.png",
         reverse: "./torifuda/tori_r_72.png",
-        classification: "7枚札　おわ",
-        goroImage: "064.png",
         order: 64
     },
     {
@@ -652,8 +508,6 @@ const fudalist = [
         kimariji: "たか",
         normal: "./torifuda/tori_73.png",
         reverse: "./torifuda/tori_r_73.png",
-        classification: "6枚札　たこ",
-        goroImage: "051.png",
         order: 51
     },
     {
@@ -661,8 +515,6 @@ const fudalist = [
         kimariji: "うか",
         normal: "./torifuda/tori_74.png",
         reverse: "./torifuda/tori_r_74.png",
-        classification: "2枚札　うつしもゆ",
-        goroImage: "008.png",
         order: 8
     },
     {
@@ -670,8 +522,6 @@ const fudalist = [
         kimariji: "ちぎりお",
         normal: "./torifuda/tori_75.png",
         reverse: "./torifuda/tori_r_75.png",
-        classification: "3枚札　いちひき",
-        goroImage: "023.png",
         order: 23
     },
     {
@@ -679,8 +529,6 @@ const fudalist = [
         kimariji: "わたのはらこ",
         normal: "./torifuda/tori_76.png",
         reverse: "./torifuda/tori_r_76.png",
-        classification: "7枚札　おわ",
-        goroImage: "076.png",
         order: 76
     },
     {
@@ -688,8 +536,6 @@ const fudalist = [
         kimariji: "せ",
         normal: "./torifuda/tori_77.png",
         reverse: "./torifuda/tori_r_77.png",
-        classification: "1枚札　むすめふさほせ",
-        goroImage: "007.png",
         order: 7
     },
     {
@@ -697,8 +543,6 @@ const fudalist = [
         kimariji: "あわじ",
         normal: "./torifuda/tori_78.png",
         reverse: "./torifuda/tori_r_78.png",
-        classification: "16枚札　あ",
-        goroImage: "085.png",
         order: 85
     },
     {
@@ -706,8 +550,6 @@ const fudalist = [
         kimariji: "あきか",
         normal: "./torifuda/tori_79.png",
         reverse: "./torifuda/tori_r_79.png",
-        classification: "16枚札　あ",
-        goroImage: "090.png",
         order: 90
     },
     {
@@ -715,8 +557,6 @@ const fudalist = [
         kimariji: "ながか",
         normal: "./torifuda/tori_80.png",
         reverse: "./torifuda/tori_r_80.png",
-        classification: "8枚札　な",
-        goroImage: "079.png",
         order: 79
     },
     {
@@ -724,8 +564,6 @@ const fudalist = [
         kimariji: "ほ",
         normal: "./torifuda/tori_81.png",
         reverse: "./torifuda/tori_r_81.png",
-        classification: "1枚札　むすめふさほせ",
-        goroImage: "006.png",
         order: 6
     },
     {
@@ -733,8 +571,6 @@ const fudalist = [
         kimariji: "おも",
         normal: "./torifuda/tori_82.png",
         reverse: "./torifuda/tori_r_82.png",
-        classification: "7枚札　おわ",
-        goroImage: "065.png",
         order: 65
     },
     {
@@ -742,8 +578,6 @@ const fudalist = [
         kimariji: "よのなかよ",
         normal: "./torifuda/tori_83.png",
         reverse: "./torifuda/tori_r_83.png",
-        classification: "4枚札　はやよか",
-        goroImage: "041.png",
         order: 41
     },
     {
@@ -751,8 +585,6 @@ const fudalist = [
         kimariji: "ながら",
         normal: "./torifuda/tori_84.png",
         reverse: "./torifuda/tori_r_84.png",
-        classification: "8枚札　な",
-        goroImage: "078.png",
         order: 78
     },
     {
@@ -760,8 +592,6 @@ const fudalist = [
         kimariji: "よも",
         normal: "./torifuda/tori_85.png",
         reverse: "./torifuda/tori_r_85.png",
-        classification: "4枚札　はやよか",
-        goroImage: "039.png",
         order: 39
     },
     {
@@ -769,8 +599,6 @@ const fudalist = [
         kimariji: "なげけ",
         normal: "./torifuda/tori_86.png",
         reverse: "./torifuda/tori_r_86.png",
-        classification: "8枚札　な",
-        goroImage: "081.png",
         order: 81
     },
     {
@@ -778,8 +606,6 @@ const fudalist = [
         kimariji: "む",
         normal: "./torifuda/tori_87.png",
         reverse: "./torifuda/tori_r_87.png",
-        classification: "1枚札　むすめふさほせ",
-        goroImage: "001.png",
         order: 1
     },
     {
@@ -787,8 +613,6 @@ const fudalist = [
         kimariji: "なにわえ",
         normal: "./torifuda/tori_88.png",
         reverse: "./torifuda/tori_r_88.png",
-        classification: "8枚札　な",
-        goroImage: "084.png",
         order: 84
     },
     {
@@ -796,8 +620,6 @@ const fudalist = [
         kimariji: "たま",
         normal: "./torifuda/tori_89.png",
         reverse: "./torifuda/tori_r_89.png",
-        classification: "6枚札　たこ",
-        goroImage: "054.png",
         order: 54
     },
     {
@@ -805,8 +627,6 @@ const fudalist = [
         kimariji: "みせ",
         normal: "./torifuda/tori_90.png",
         reverse: "./torifuda/tori_r_90.png",
-        classification: "5枚札　み",
-        goroImage: "047.png",
         order: 47
     },
     {
@@ -814,8 +634,6 @@ const fudalist = [
         kimariji: "きり",
         normal: "./torifuda/tori_91.png",
         reverse: "./torifuda/tori_r_91.png",
-        classification: "3枚札　いちひき",
-        goroImage: "027.png",
         order: 27
     },
     {
@@ -823,8 +641,6 @@ const fudalist = [
         kimariji: "わがいそ",
         normal: "./torifuda/tori_92.png",
         reverse: "./torifuda/tori_r_92.png",
-        classification: "7枚札　おわ",
-        goroImage: "072.png",
         order: 72
     },
     {
@@ -832,8 +648,6 @@ const fudalist = [
         kimariji: "よのなかは",
         normal: "./torifuda/tori_93.png",
         reverse: "./torifuda/tori_r_93.png",
-        classification: "4枚札　はやよか",
-        goroImage: "040.png",
         order: 40
     },
     {
@@ -841,8 +655,6 @@ const fudalist = [
         kimariji: "みよ",
         normal: "./torifuda/tori_94.png",
         reverse: "./torifuda/tori_r_94.png",
-        classification: "5枚札　み",
-        goroImage: "048.png",
         order: 48
     },
     {
@@ -850,8 +662,6 @@ const fudalist = [
         kimariji: "おおけ",
         normal: "./torifuda/tori_95.png",
         reverse: "./torifuda/tori_r_95.png",
-        classification: "7枚札　おわ",
-        goroImage: "068.png",
         order: 68
     },
     {
@@ -859,8 +669,6 @@ const fudalist = [
         kimariji: "はなさ",
         normal: "./torifuda/tori_96.png",
         reverse: "./torifuda/tori_r_96.png",
-        classification: "4枚札　はやよか",
-        goroImage: "032.png",
         order: 32
     },
     {
@@ -868,8 +676,6 @@ const fudalist = [
         kimariji: "こぬ",
         normal: "./torifuda/tori_97.png",
         reverse: "./torifuda/tori_r_97.png",
-        classification: "6枚札　たこ",
-        goroImage: "060.png",
         order: 60
     },
     {
@@ -877,8 +683,6 @@ const fudalist = [
         kimariji: "かぜそ",
         normal: "./torifuda/tori_98.png",
         reverse: "./torifuda/tori_r_98.png",
-        classification: "4枚札　はやよか",
-        goroImage: "045.png",
         order: 45
     },
     {
@@ -886,8 +690,6 @@ const fudalist = [
         kimariji: "ひとも",
         normal: "./torifuda/tori_99.png",
         reverse: "./torifuda/tori_r_99.png",
-        classification: "3枚札　いちひき",
-        goroImage: "026.png",
         order: 26
     },
     {
@@ -895,8 +697,6 @@ const fudalist = [
         kimariji: "もも",
         normal: "./torifuda/tori_100.png",
         reverse: "./torifuda/tori_r_100.png",
-        classification: "2枚札　うつしもゆ",
-        goroImage: "015.png",
         order: 15
     },
 ];
