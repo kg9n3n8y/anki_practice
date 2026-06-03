@@ -1,0 +1,372 @@
+:root {
+  font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color: #1a1a1a;
+  background-color: #f5f0e6;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+a {
+  color: #1a472a;
+}
+
+button,
+.app-button,
+a.app-button {
+  font: inherit;
+  cursor: pointer;
+  border: 1px solid #1a472a;
+  background: #1a472a;
+  color: #f5f0e6;
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  text-decoration: none;
+  display: inline-block;
+}
+
+button.secondary,
+.app-button.secondary {
+  background: #f5f0e6;
+  color: #1a472a;
+}
+
+.app-shell {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem 1.25rem 2rem;
+}
+
+.app-header h1 {
+  margin: 0 0 0.25rem;
+  font-size: 1.5rem;
+  color: #1a472a;
+}
+
+.app-header p {
+  margin: 0 0 1.25rem;
+  color: #444;
+}
+
+.app-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.app-card {
+  background: #fff;
+  border: 1px solid #d8cfc0;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.app-card h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.1rem;
+}
+
+.app-placeholder {
+  color: #666;
+  font-size: 0.95rem;
+}
+
+/* 取り札: 原寸 400×560 の比率を維持（高さは width に連動） */
+.fuda-img {
+  height: auto;
+  max-width: 100%;
+  object-fit: contain;
+  aspect-ratio: 400 / 560;
+  flex-shrink: 0;
+  vertical-align: top;
+}
+
+.fuda-img-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+/* --- 暗記スタート --- */
+.practice-start-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.practice-start-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.95rem;
+}
+
+.practice-start-form select {
+  font: inherit;
+  padding: 0.4rem 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.checkbox-label {
+  flex-direction: row !important;
+  align-items: center;
+  gap: 0.5rem !important;
+}
+
+.hint {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+/* --- 盤面 --- */
+.practice-main {
+  width: 100%;
+  max-width: 100%;
+}
+
+.practice-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.timer {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1a472a;
+}
+
+.confirm-prompt {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.confirm-kimariji {
+  font-size: 1.5rem;
+  font-family: serif;
+}
+
+.feedback {
+  font-size: 1.25rem;
+}
+
+.feedback--correct {
+  color: #c00;
+}
+
+.feedback--incorrect {
+  color: #06c;
+}
+
+.karuta-board {
+  width: 100%;
+  overflow-x: auto;
+  padding: 0.25rem 0;
+}
+
+.board-camp {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.board-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3vw;
+  min-height: 2.5rem;
+}
+
+.board-camp-gap {
+  height: 3vw;
+  min-height: 12px;
+  max-height: 28px;
+}
+
+.board-area {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: flex-end;
+  gap: 0;
+  min-height: 3rem;
+  padding: 2px 0;
+}
+
+.board-area.pack-start {
+  justify-content: flex-start;
+}
+
+.board-area.pack-end {
+  justify-content: flex-end;
+}
+
+.board-card-btn {
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: transparent;
+  line-height: 0;
+  cursor: default;
+}
+
+.board-card-btn:not(:disabled) {
+  cursor: pointer;
+}
+
+.board-card-btn:not(:disabled):hover .fuda-img {
+  outline: 2px solid #1a472a;
+  outline-offset: 1px;
+}
+
+.board-card-btn:disabled.is-face-up {
+  cursor: default;
+}
+
+.practice-meta {
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+/* --- 定位置編集 --- */
+.teigi-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.teigi-area {
+  border: 1px dashed #b8a88a;
+  border-radius: 8px;
+  min-height: 4rem;
+  padding: 0.35rem;
+  background: #faf8f4;
+}
+
+.teigi-area--over {
+  background: #e8f0e8;
+  border-color: #1a472a;
+}
+
+.teigi-area-label {
+  font-size: 0.75rem;
+  color: #555;
+  margin-bottom: 0.25rem;
+}
+
+.teigi-area-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.teigi-pool {
+  border: 1px solid #d8cfc0;
+  border-radius: 8px;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  background: #fff;
+}
+
+.teigi-pool-scroll {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  overflow-x: auto;
+  height: 14rem;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  align-items: flex-start;
+}
+
+.teigi-pool-label,
+.teigi-pool-label {
+  font-size: 0.85rem;
+  color: #555;
+  margin-bottom: 0.35rem;
+}
+
+.teigi-chip {
+  font-family: serif;
+  font-size: 1rem;
+  padding: 0.35rem 0.5rem;
+  background: #e8dcc8;
+  border-radius: 4px;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.teigi-chip--overlay {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  cursor: grabbing;
+}
+
+.save-msg {
+  color: #1a472a;
+  font-weight: 600;
+}
+
+.error-msg {
+  color: #b00;
+}
+
+/* --- モーダル --- */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 1rem;
+}
+
+.modal {
+  max-width: 480px;
+  width: 100%;
+  max-height: 90vh;
+  overflow: auto;
+}
+
+.import-textarea {
+  width: 100%;
+  font: inherit;
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.results-list {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.results-list li {
+  margin-bottom: 0.35rem;
+}
