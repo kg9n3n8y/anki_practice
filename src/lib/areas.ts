@@ -18,6 +18,13 @@ export const RIGHT_AREAS: AreaId[] = [
 
 export const ALL_AREAS: AreaId[] = [...LEFT_AREAS, ...RIGHT_AREAS];
 
+/** 自陣の段配置（上→下＝相手側に近い→手前）。定位置編集・暗記の自陣と同じ */
+export const SELF_AREA_ROWS: { left: AreaId; right: AreaId }[] = [
+  { left: "leftUpper", right: "rightUpper" },
+  { left: "leftMiddle", right: "rightMiddle" },
+  { left: "leftLower", right: "rightLower" },
+];
+
 export const AREA_LABELS: Record<AreaId, string> = {
   leftUpper: "左上段",
   rightUpper: "右上段",

@@ -9,6 +9,7 @@ import {
 } from "./areas";
 import { campCounts } from "./practiceDefaults";
 import { shuffle } from "./shuffle";
+import { emptyTeigiState, poemOrderMap, stateFromTeigi } from "./teigiState";
 
 let cardSeq = 0;
 function newCardId(): string {
@@ -148,18 +149,17 @@ function pickAreaForCard(
   return candidates[candidates.length - 1];
 }
 
-function teigiAreaMap(teigi: TeigiData | null): Map<number, AreaId> {
-  const map = new Map<number, AreaId>();
-  if (!teigi) return map;
-  for (const p of teigi.placements) {
-    map.set(p.no, p.area);
-  }
-  return map;
+function teigiAreaState(
+  teigi: TeigiData | null,
+  poems: Poem[],
+): ReturnType<typeof stateFromTeigi> {
+  if (!teigi) return emptyTeigiState();
+  return stateFromTeigi(teigi, poemOrderMap(poems));
 }
 
 function placeCamp(
   poems: Poem[],
-  teigiMap: Map<number, AreaId>,
+  teigi: TeigiData | null,
   useTeigi: boolean,
 ): AreaBoard {
   const board = emptyAreaMap<BoardCard>();
@@ -169,17 +169,24 @@ function placeCamp(
     remaining.set(a, targets[a]);
   }
 
-  const unassigned: Poem[] = [];
+  const poemByNo = new Map(poems.map((p) => [p.no, p]));
+  const placed = new Set<number>();
 
-  for (const poem of poems) {
-    const area = useTeigi ? teigiMap.get(poem.no) : undefined;
-    if (area && (remaining.get(area) ?? 0) > 0) {
-      board[area].push({ id: newCardId(), poem, faceUp: true });
-      remaining.set(area, (remaining.get(area) ?? 0) - 1);
-    } else {
-      unassigned.push(poem);
+  if (useTeigi && teigi) {
+    const teigiState = teigiAreaState(teigi, poems);
+    for (const area of ALL_AREAS) {
+      for (const no of teigiState[area]) {
+        if ((remaining.get(area) ?? 0) <= 0) continue;
+        const poem = poemByNo.get(no);
+        if (!poem) continue;
+        board[area].push({ id: newCardId(), poem, faceUp: true });
+        remaining.set(area, (remaining.get(area) ?? 0) - 1);
+        placed.add(no);
+      }
     }
   }
+
+  const unassigned = poems.filter((p) => !placed.has(p.no));
 
   const shuffled = shuffle(unassigned);
   for (const poem of shuffled) {
@@ -211,11 +218,10 @@ export function generateBoard(
   const selected = pickRandomPoems(allPoems, oppCount + selfCount);
   const opponentPoems = selected.slice(0, oppCount);
   const selfPoems = selected.slice(oppCount);
-  const teigiMap = teigiAreaMap(teigi);
 
   return {
-    opponent: placeCamp(opponentPoems, teigiMap, false),
-    self: placeCamp(selfPoems, teigiMap, settings.useTeigi),
+    opponent: placeCamp(opponentPoems, teigi, false),
+    self: placeCamp(selfPoems, teigi, settings.useTeigi),
     settings,
   };
 }

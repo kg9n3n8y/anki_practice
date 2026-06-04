@@ -23,10 +23,18 @@ export interface TeigiPlacement {
   area: AreaId;
 }
 
-export interface TeigiData {
+/** v1 形式（インポート時のみ。保存は v2） */
+export interface TeigiDataV1 {
   version: 1;
   updatedAt: string;
   placements: TeigiPlacement[];
+}
+
+/** 各エリアの歌番号を並び順どおりに保持 */
+export interface TeigiData {
+  version: 2;
+  updatedAt: string;
+  areas: Record<AreaId, number[]>;
 }
 
 export interface PracticeSettings {

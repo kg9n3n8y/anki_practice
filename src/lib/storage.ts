@@ -1,4 +1,6 @@
+import { fudalist } from "../data/fudalist";
 import type { PracticeResult, PracticeSettings, TeigiData } from "../types";
+import { normalizeTeigi } from "./teigiIo";
 
 const KEYS = {
   teigi: "teigi",
@@ -12,7 +14,7 @@ export function loadTeigi(): TeigiData | null {
   try {
     const raw = localStorage.getItem(KEYS.teigi);
     if (!raw) return null;
-    return JSON.parse(raw) as TeigiData;
+    return normalizeTeigi(JSON.parse(raw), fudalist);
   } catch {
     return null;
   }

@@ -640,7 +640,7 @@ export const fudalist: Poem[] = [
   },
   {
     "no": 92,
-    "kimariji": "わがいそ",
+    "kimariji": "わがそ",
     "normal": "torifuda/tori_92.png",
     "reverse": "torifuda/tori_r_92.png",
     "order": 72

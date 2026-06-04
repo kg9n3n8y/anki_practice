@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { fudalist } from "../data/fudalist";
 import { modeLabel } from "../lib/poemImage";
 import { hasTeigi, loadResults, saveTeigi } from "../lib/storage";
 import { parseTeigiJson } from "../lib/teigiIo";
@@ -16,7 +17,7 @@ export function TopPage() {
     setImportError("");
     setImportOk("");
     try {
-      const data = parseTeigiJson(importText);
+      const data = parseTeigiJson(importText, fudalist);
       saveTeigi(data);
       setImportOk("定位置を取り込みました");
       setImportText("");

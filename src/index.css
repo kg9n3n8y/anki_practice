@@ -66,6 +66,19 @@ button.secondary,
   }
 }
 
+/* 定位置編集: PC では横に広げる（1画面幅を超えない） */
+.app-shell--teigi {
+  max-width: 960px;
+}
+
+@media (min-width: 1024px) {
+  .app-shell--teigi {
+    max-width: min(1180px, calc(100vw - 2.5rem));
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+}
+
 .app-nav {
   display: flex;
   flex-wrap: wrap;
@@ -311,10 +324,16 @@ button.secondary,
 
 /* --- 定位置編集 --- */
 .teigi-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.teigi-grid-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0.5rem;
-  margin-bottom: 1rem;
 }
 
 .teigi-area {
@@ -330,16 +349,24 @@ button.secondary,
   border-color: #1a472a;
 }
 
-.teigi-area-label {
-  font-size: 0.75rem;
-  color: #555;
-  margin-bottom: 0.25rem;
-}
-
 .teigi-area-chips {
   display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
-  gap: 0.25rem;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 0.15rem;
+  min-height: 3rem;
+}
+
+.teigi-area--right .teigi-area-chips {
+  justify-content: flex-end;
+}
+
+.teigi-chip--vertical {
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  display: inline-block;
 }
 
 .teigi-pool {
@@ -353,30 +380,34 @@ button.secondary,
 .teigi-pool-scroll {
   display: flex;
   flex-direction: row;
-  gap: 0.5rem;
+  flex-wrap: nowrap;
+  gap: 0.15rem;
   overflow-x: auto;
-  height: 14rem;
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
+  height: 12rem;
   align-items: flex-start;
-}
-
-.teigi-pool-label,
-.teigi-pool-label {
-  font-size: 0.85rem;
-  color: #555;
-  margin-bottom: 0.35rem;
+  padding: 0.15rem 0;
 }
 
 .teigi-chip {
-  font-family: serif;
+  font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
   font-size: 1rem;
-  padding: 0.35rem 0.5rem;
-  background: #e8dcc8;
-  border-radius: 4px;
+  color: #1a472a;
+  padding: 0.1rem 0.15rem;
+  background: #dcebd8;
+  border: 1px solid #9bb89a;
+  border-radius: 3px;
   cursor: grab;
   touch-action: none;
   user-select: none;
+}
+
+.teigi-chip.teigi-chip--vertical {
+  line-height: 1;
+  letter-spacing: 0;
+  width: 1em;
+  padding: 0.08rem 0.04rem;
+  box-sizing: content-box;
+  text-align: center;
 }
 
 .teigi-chip--overlay {
