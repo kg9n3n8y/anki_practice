@@ -20,7 +20,12 @@ export default defineConfig(({ mode }) => {
       },
       VitePWA({
         registerType: "autoUpdate",
-        includeAssets: ["torifuda/tori_ura.png"],
+        includeAssets: [
+          "torifuda/tori_ura.png",
+          "pwa-icon-180.png",
+          "pwa-icon-192.png",
+          "pwa-icon-512.png",
+        ],
         manifest: {
           name: "かるた暗記練",
           short_name: "暗記練",
@@ -32,10 +37,22 @@ export default defineConfig(({ mode }) => {
           scope: base,
           icons: [
             {
-              src: "pwa-icon.svg",
-              sizes: "any",
-              type: "image/svg+xml",
+              src: "pwa-icon-192.png",
+              sizes: "192x192",
+              type: "image/png",
               purpose: "any",
+            },
+            {
+              src: "pwa-icon-512.png",
+              sizes: "512x512",
+              type: "image/png",
+              purpose: "any",
+            },
+            {
+              src: "pwa-icon-512.png",
+              sizes: "512x512",
+              type: "image/png",
+              purpose: "maskable",
             },
           ],
         },
