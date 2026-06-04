@@ -286,6 +286,50 @@ button.secondary,
   font-weight: 400;
 }
 
+.app-footer {
+  margin-top: 1.25rem;
+  padding: 0.5rem 0 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  text-align: center;
+}
+
+.app-footer-author {
+  margin: 0;
+  font-size: 0.78rem;
+  color: #666;
+}
+
+.app-footer-author-link {
+  color: #1a472a;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.app-footer-author-link:hover {
+  color: #0f3520;
+}
+
+.app-footer-copy {
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #1a472a;
+  background: #faf8f4;
+  border: 1px solid #d8cfc0;
+  border-radius: 6px;
+  padding: 0.2rem 0.55rem;
+  cursor: pointer;
+  line-height: 1.4;
+}
+
+.app-footer-copy:hover {
+  border-color: #9bb89a;
+  background: #fff;
+}
+
 /* --- 盤面 --- */
 .practice-main {
   width: 100%;

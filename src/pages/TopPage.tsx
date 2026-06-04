@@ -5,6 +5,10 @@ import { modeLabel } from "../lib/poemImage";
 import { parsePositionText } from "../lib/positionIo";
 import { hasPosition, loadResults, savePosition } from "../lib/storage";
 
+const APP_SHARE_URL = "https://kg9n3n8y.github.io/anki_practice/";
+const AUTHOR_SITE_URL =
+  "https://sites.google.com/view/hyakunin-issyu-oboekata/";
+
 export function TopPage() {
   const results = loadResults();
   const positionSaved = hasPosition();
@@ -12,6 +16,20 @@ export function TopPage() {
   const [importText, setImportText] = useState("");
   const [importError, setImportError] = useState("");
   const [importOk, setImportOk] = useState("");
+  const [urlCopied, setUrlCopied] = useState(false);
+
+  const copyAppUrl = async () => {
+    try {
+      if (!navigator.clipboard?.writeText) {
+        throw new Error("clipboard unavailable");
+      }
+      await navigator.clipboard.writeText(APP_SHARE_URL);
+      setUrlCopied(true);
+      window.setTimeout(() => setUrlCopied(false), 2000);
+    } catch {
+      window.alert("コピーに失敗しました");
+    }
+  };
 
   const doImport = () => {
     setImportError("");
@@ -89,6 +107,27 @@ export function TopPage() {
           </ul>
         )}
       </section>
+
+      <footer className="app-footer">
+        <button
+          type="button"
+          className="app-footer-copy"
+          onClick={() => void copyAppUrl()}
+        >
+          {urlCopied ? "コピーしました" : "URLをコピー"}
+        </button>
+        <p className="app-footer-author">
+          作者:{" "}
+          <a
+            href={AUTHOR_SITE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="app-footer-author-link"
+          >
+            つばさ先輩
+          </a>
+        </p>
+      </footer>
 
       {importOpen && (
         <div className="modal-backdrop" role="dialog" aria-modal="true">
