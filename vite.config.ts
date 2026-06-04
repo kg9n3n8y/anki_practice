@@ -1,4 +1,5 @@
 import react from "@vitejs/plugin-react";
+import { copyFileSync } from "node:fs";
 import { defineConfig, loadEnv } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 
@@ -11,6 +12,12 @@ export default defineConfig(({ mode }) => {
     base,
     plugins: [
       react(),
+      {
+        name: "copy-404-for-github-pages",
+        closeBundle() {
+          copyFileSync("dist/index.html", "dist/404.html");
+        },
+      },
       VitePWA({
         registerType: "autoUpdate",
         includeAssets: ["torifuda/tori_ura.png"],

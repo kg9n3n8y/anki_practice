@@ -24,15 +24,38 @@ npm run dev
 
 ## GitHub Pages
 
-リポジトリ名が `anki_practice` の場合の例:
+公開 URL（例）: https://kg9n3n8y.github.io/anki_practice/
+
+**重要:** リポジトリ直下の `index.html`（開発用）をそのまま公開しても動きません。必ず **`npm run build` で生成した `dist/`** をデプロイしてください。
+
+### 推奨: GitHub Actions で自動デプロイ
+
+1. GitHub リポジトリ → **Settings** → **Pages**
+2. **Build and deployment** → **Source** を **GitHub Actions** に設定（「Deploy from a branch」ではない）
+3. `main` ブランチに push すると `.github/workflows/deploy.yml` が実行される
+4. **Actions** タブで「Deploy to GitHub Pages」が成功するまで待つ
+5. 上記 URL を開く（反映に 1〜2 分かかることがあります）
+
+ワークフローは `VITE_BASE_PATH=/${リポジトリ名}/` でビルドします。リポジトリ名を変えた場合は `.github/workflows/deploy.yml` の `VITE_BASE_PATH` も合わせて変更してください。
+
+`username.github.io` リポジトリ（ユーザーサイト）の場合は `VITE_BASE_PATH=/` に変更します。
+
+### ローカルで Pages 向けビルドを試す
 
 ```bash
-# .env
-VITE_BASE_PATH=/anki_practice/
-npm run build
+npm run build:pages
+npm run preview
 ```
 
-`dist/` を GitHub Pages にデプロイする。Actions を使う場合はワークフロー（`.github/workflows/deploy.yml`）を参照。
+ブラウザの開発者ツール → Network で、JS/CSS が `/anki_practice/assets/...` から **200** で読み込まれていることを確認してください。`/src/main.tsx` を参照していたら base path が間違っています。
+
+### うまく表示されないとき
+
+| 症状 | 原因の例 |
+| --- | --- |
+| 真っ白・何も表示されない | Pages の Source が branch の `/ (root)` になっている（未ビルドの index.html を公開している） |
+| デザインなし・真っ白 | `VITE_BASE_PATH` が `/` のままビルドしている |
+| 404 | URL が `...github.io/anki_practice`（末尾スラッシュなし）→ `.../anki_practice/` を試す |
 
 ## ディレクトリ
 
