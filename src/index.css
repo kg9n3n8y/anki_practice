@@ -101,7 +101,7 @@ button.secondary,
 }
 
 .fuda-img--board {
-  width: var(--fuda-w);
+  width: calc(var(--fuda-w) - 1px);
   max-width: none;
 }
 
@@ -188,6 +188,25 @@ button.secondary,
   flex-shrink: 0;
 }
 
+/* 確認モード: 決まり字・なしをツールバー中央に（中止は右端） */
+.practice-toolbar--confirm {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+}
+
+.practice-toolbar--confirm .practice-toolbar-main {
+  grid-column: 2;
+  flex: none;
+  justify-content: center;
+}
+
+.practice-toolbar--confirm .practice-toolbar-cancel {
+  grid-column: 3;
+  justify-self: end;
+  margin-left: 0;
+}
+
 .practice-toolbar .app-button {
   padding: 0.45rem 0.8rem;
   font-size: 0.9rem;
@@ -252,7 +271,7 @@ button.secondary,
   display: flex;
   flex-wrap: nowrap;
   align-items: flex-end;
-  gap: 0;
+  gap: 1px;
   width: calc(var(--fuda-w) * 6);
   flex-shrink: 0;
   min-height: calc(var(--fuda-w) * 1.4);

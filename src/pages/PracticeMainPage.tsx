@@ -49,6 +49,7 @@ export function PracticeMainPage() {
   const [confirmSeconds, setConfirmSeconds] = useState(0);
   const [answering, setAnswering] = useState(false);
   const [cancelConfirmOpen, setCancelConfirmOpen] = useState(false);
+  const [completeConfirmOpen, setCompleteConfirmOpen] = useState(false);
   const { containerRef, fudaWidth } = useBoardFudaWidth();
 
   useEffect(() => {
@@ -197,7 +198,9 @@ export function PracticeMainPage() {
 
   return (
     <div className="practice-main" style={boardStyle}>
-      <div className="practice-toolbar app-card">
+      <div
+        className={`practice-toolbar app-card${phase === "confirm" ? " practice-toolbar--confirm" : ""}`}
+      >
         <div className="practice-toolbar-main">
           {phase === "memorize" && (
             <>
@@ -207,7 +210,7 @@ export function PracticeMainPage() {
               <button
                 type="button"
                 className="app-button"
-                onClick={() => beginConfirm(board)}
+                onClick={() => setCompleteConfirmOpen(true)}
               >
                 完了
               </button>
@@ -249,6 +252,34 @@ export function PracticeMainPage() {
           中止
         </button>
       </div>
+
+      {completeConfirmOpen && (
+        <div className="modal-backdrop" role="dialog" aria-modal="true">
+          <div className="modal app-card">
+            <h2>確認モードに進みますか？</h2>
+            <p>暗記を終えて、決まり字から位置を思い出すテストを始めます。</p>
+            <div className="app-nav">
+              <button
+                type="button"
+                className="app-button"
+                onClick={() => {
+                  setCompleteConfirmOpen(false);
+                  beginConfirm(board);
+                }}
+              >
+                進む
+              </button>
+              <button
+                type="button"
+                className="secondary"
+                onClick={() => setCompleteConfirmOpen(false)}
+              >
+                暗記を続ける
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {cancelConfirmOpen && (
         <div className="modal-backdrop" role="dialog" aria-modal="true">

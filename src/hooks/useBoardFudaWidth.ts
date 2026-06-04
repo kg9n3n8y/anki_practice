@@ -3,10 +3,14 @@ import { BOARD_ROW_UNITS } from "../lib/areas";
 
 const MIN_FUDA_WIDTH = 20;
 
+/** 1画面に収めるため、算出幅をわずかに縮小（縦横ともに約5%） */
+const BOARD_DISPLAY_SCALE = 0.95;
+
 /** コンテナ幅から取り札1枚の幅を算出（13単位レイアウト） */
 export function fudaWidthFromContainer(containerWidth: number): number {
   if (containerWidth <= 0) return MIN_FUDA_WIDTH;
-  return Math.max(MIN_FUDA_WIDTH, Math.floor(containerWidth / BOARD_ROW_UNITS));
+  const fitted = Math.floor(containerWidth / BOARD_ROW_UNITS);
+  return Math.max(MIN_FUDA_WIDTH, Math.floor(fitted * BOARD_DISPLAY_SCALE));
 }
 
 /** 盤面コンテナの実幅に合わせて --fuda-w を決める */
