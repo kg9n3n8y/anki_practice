@@ -2,7 +2,7 @@
 
 競技かるたの配置暗記練習 Web アプリ（Vite + React + TypeScript）。
 
-仕様は [`doc/`](doc/) を参照。
+仕様は [`doc/`](doc/) を参照（Phase 1 の実装内容と同期済み。未実装はモバイル陣ズームのみ）。
 
 ## セットアップ
 
@@ -86,9 +86,12 @@ npm run generate:fudalist
 
 ## 実装状況
 
-- [x] Vite + React + TS + React Router + PWA
-- [x] 暗記練習スタート（設定保存）
-- [x] 暗記練習メイン（盤面・タイマー・確認モード・結果）
-- [x] 定位置編集（D&D・保存・テキストコピー）
-- [x] トップ（成績表示・定位置テキスト取りこみ）
-- [ ] モバイル陣ズーム（Phase 2）
+Phase 1 は実装済み。仕様の詳細は [`doc/`](doc/) を参照。
+
+- [x] Vite + React + TS + React Router + PWA（アイコン含む）
+- [x] GitHub Actions による GitHub Pages デプロイ
+- [x] トップ（成績・定位置テキスト取りこみ・URLコピー・作者リンク）
+- [x] 暗記練習スタート（2列設定 UI・LocalStorage 保存）
+- [x] 暗記練習メイン（暗記タイマー・確認モード・近接正解・効果音・結果）
+- [x] 定位置編集（`/position`、D&D・テキストコピー・旧 `/teigi` リダイレクト）
+- [ ] モバイル陣ズーム（Phase 2・未実装）
