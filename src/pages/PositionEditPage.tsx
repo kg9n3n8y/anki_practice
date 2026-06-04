@@ -23,7 +23,12 @@ import { CSS } from "@dnd-kit/utilities";
 import { useMemo, useRef, useState, type CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import { fudalist } from "../data/fudalist";
-import { ALL_AREAS, isLeftArea, SELF_AREA_ROWS } from "../lib/areas";
+import {
+  ALL_AREAS,
+  MAX_CARDS_PER_AREA,
+  isLeftArea,
+  SELF_AREA_ROWS,
+} from "../lib/areas";
 import { copyPositionCompact } from "../lib/positionCompact";
 import {
   adjustIndexAfterRemoval,
@@ -397,6 +402,18 @@ export function PositionEditPage() {
 
       if (overContainer !== POOL_ID) {
         const toArea = overContainer.replace("area-", "") as AreaId;
+        const fromArea =
+          activeContainer === POOL_ID
+            ? null
+            : (activeContainer.replace("area-", "") as AreaId);
+        const isExternalMove =
+          activeContainer === POOL_ID || fromArea !== toArea;
+        if (
+          isExternalMove &&
+          prev[toArea].length >= MAX_CARDS_PER_AREA
+        ) {
+          return prev;
+        }
         const items = [...next[toArea]];
         const insertIndex = resolveInsertIndex(
           items,

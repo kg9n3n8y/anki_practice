@@ -165,6 +165,16 @@ function remainingHeadroom(board: AreaBoard): Map<AreaId, number> {
   return remaining;
 }
 
+function pushCardToArea(
+  board: AreaBoard,
+  area: AreaId,
+  poem: Poem,
+): boolean {
+  if (board[area].length >= MAX_CARDS_PER_AREA) return false;
+  board[area].push({ id: newCardId(), poem, faceUp: true });
+  return true;
+}
+
 /** 定位置 ON：選出札のうち登録があるものを必ずそのエリアへ（空エリア可）。残りは空きスロットへランダム */
 function placeCampWithPosition(
   poems: Poem[],
@@ -179,8 +189,9 @@ function placeCampWithPosition(
     for (const no of positionState[area]) {
       const poem = poemByNo.get(no);
       if (!poem) continue;
-      board[area].push({ id: newCardId(), poem, faceUp: true });
-      placed.add(no);
+      if (pushCardToArea(board, area, poem)) {
+        placed.add(no);
+      }
     }
   }
 
@@ -191,7 +202,7 @@ function placeCampWithPosition(
     const candidates = ALL_AREAS.filter((a) => (headroom.get(a) ?? 0) > 0);
     if (candidates.length === 0) break;
     const area = pickAreaForCard(candidates, headroom);
-    board[area].push({ id: newCardId(), poem, faceUp: true });
+    pushCardToArea(board, area, poem);
   }
 
   return board;
@@ -210,7 +221,7 @@ function placeCampRandom(poems: Poem[]): AreaBoard {
     const candidates = ALL_AREAS.filter((a) => (remaining.get(a) ?? 0) > 0);
     if (candidates.length === 0) break;
     const area = pickAreaForCard(candidates, remaining);
-    board[area].push({ id: newCardId(), poem, faceUp: true });
+    if (!pushCardToArea(board, area, poem)) continue;
     remaining.set(area, (remaining.get(area) ?? 0) - 1);
   }
 

@@ -20,8 +20,8 @@ export default defineConfig(({ mode }) => {
       },
       VitePWA({
         registerType: "autoUpdate",
+        injectRegister: null,
         includeAssets: [
-          "torifuda/tori_ura.png",
           "pwa-icon-180.png",
           "pwa-icon-192.png",
           "pwa-icon-512.png",
@@ -58,17 +58,28 @@ export default defineConfig(({ mode }) => {
           ],
         },
         workbox: {
-          globPatterns: ["**/*.{js,css,html,ico,svg,png,woff2}"],
-          globIgnores: ["**/torifuda/**"],
+          globPatterns: [
+            "**/*.{js,css,html,ico,svg,png,woff2,webmanifest}",
+          ],
+          navigateFallback: "index.html",
+          navigateFallbackDenylist: [
+            /\/torifuda\//,
+            /\/assets\//,
+            /\.(?:png|jpg|jpeg|webp|gif|svg|ico|woff2?)$/i,
+          ],
+          maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
           runtimeCaching: [
             {
-              urlPattern: /\/torifuda\//,
+              urlPattern: ({ url }) => url.pathname.includes("/torifuda/"),
               handler: "CacheFirst",
               options: {
                 cacheName: "torifuda-images",
                 expiration: {
                   maxEntries: 250,
                   maxAgeSeconds: 60 * 60 * 24 * 365,
+                },
+                cacheableResponse: {
+                  statuses: [0, 200],
                 },
               },
             },
