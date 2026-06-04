@@ -12,6 +12,7 @@ export function TopPage() {
   const [importText, setImportText] = useState("");
   const [importError, setImportError] = useState("");
   const [importOk, setImportOk] = useState("");
+  const [importFileName, setImportFileName] = useState("");
 
   const doImport = () => {
     setImportError("");
@@ -32,6 +33,10 @@ export function TopPage() {
 
   return (
     <>
+      <header className="app-title-header">
+        <h1 className="app-title">かるた暗記練</h1>
+      </header>
+
       <section className="app-card">
         <h2>暗記練習</h2>
         <Link to="/practice/start" className="app-button">
@@ -53,6 +58,7 @@ export function TopPage() {
               setImportOpen(true);
               setImportError("");
               setImportOk("");
+              setImportFileName("");
             }}
           >
             定位置の取りこみ
@@ -84,29 +90,50 @@ export function TopPage() {
           <div className="modal app-card">
             <h2>定位置の取りこみ</h2>
             <p>JSON を貼り付けるか、ファイルを選択してください。</p>
-            <textarea
-              className="import-textarea"
-              value={importText}
-              onChange={(e) => setImportText(e.target.value)}
-              rows={8}
-              placeholder='{"version":1,...}'
-            />
-            <input
-              type="file"
-              accept="application/json,.json"
-              onChange={(e) => {
-                const file = e.target.files?.[0];
-                if (!file) return;
-                const reader = new FileReader();
-                reader.onload = () => {
-                  setImportText(String(reader.result ?? ""));
-                };
-                reader.readAsText(file);
-              }}
-            />
-            {importError && <p className="error-msg">{importError}</p>}
-            {importOk && <p className="save-msg">{importOk}</p>}
-            <div className="app-nav">
+            <div className="import-dialog-body">
+              <label className="import-field">
+                <span className="import-field-label">JSON を貼り付け</span>
+                <textarea
+                  className="import-textarea"
+                  value={importText}
+                  onChange={(e) => setImportText(e.target.value)}
+                  rows={8}
+                  placeholder='{"version":2,...}'
+                />
+              </label>
+
+              <div className="import-file-field">
+                <span className="import-field-label">ファイルから読み込む</span>
+                <div className="import-file-control">
+                  <label className="import-file-button">
+                    ファイルを選択
+                    <input
+                      type="file"
+                      accept="application/json,.json"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (!file) return;
+                        setImportFileName(file.name);
+                        const reader = new FileReader();
+                        reader.onload = () => {
+                          setImportText(String(reader.result ?? ""));
+                        };
+                        reader.readAsText(file);
+                      }}
+                    />
+                  </label>
+                  <span
+                    className={`import-file-name${importFileName ? " import-file-name--selected" : ""}`}
+                  >
+                    {importFileName || "選択されていません"}
+                  </span>
+                </div>
+              </div>
+
+              {importError && <p className="error-msg">{importError}</p>}
+              {importOk && <p className="save-msg">{importOk}</p>}
+            </div>
+            <div className="app-nav import-dialog-actions">
               <button type="button" className="app-button" onClick={doImport}>
                 取り込む
               </button>

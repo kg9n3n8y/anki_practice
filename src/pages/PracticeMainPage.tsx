@@ -198,23 +198,34 @@ export function PracticeMainPage() {
 
   return (
     <div className="practice-main" style={boardStyle}>
-      <div
-        className={`practice-toolbar app-card${phase === "confirm" ? " practice-toolbar--confirm" : ""}`}
-      >
-        <div className="practice-toolbar-main">
+      <div className="practice-toolbar app-card practice-toolbar--split">
+        <div className="practice-toolbar-left">
           {phase === "memorize" && (
-            <>
-              <span className="timer">
-                残り {mm}:{ss.toString().padStart(2, "0")}
-              </span>
-              <button
-                type="button"
-                className="app-button"
-                onClick={() => setCompleteConfirmOpen(true)}
-              >
-                完了
-              </button>
-            </>
+            <button
+              type="button"
+              className="app-button"
+              onClick={() => setCompleteConfirmOpen(true)}
+            >
+              完了
+            </button>
+          )}
+          {phase === "confirm" && currentQuestion && (
+            <button
+              type="button"
+              className="app-button"
+              disabled={answering}
+              onClick={() => handleAnswer("none")}
+            >
+              なし
+            </button>
+          )}
+        </div>
+
+        <div className="practice-toolbar-center">
+          {phase === "memorize" && (
+            <span className="timer">
+              残り {mm}:{ss.toString().padStart(2, "0")}
+            </span>
           )}
           {phase === "confirm" && currentQuestion && (
             <>
@@ -224,14 +235,6 @@ export function PracticeMainPage() {
                   {currentQuestion.kimariji}
                 </strong>
               </div>
-              <button
-                type="button"
-                className="app-button secondary"
-                disabled={answering}
-                onClick={() => handleAnswer("none")}
-              >
-                なし
-              </button>
               {feedback && (
                 <span
                   className={`feedback feedback--${feedback}`}
@@ -244,9 +247,10 @@ export function PracticeMainPage() {
             </>
           )}
         </div>
+
         <button
           type="button"
-          className="app-button secondary practice-toolbar-cancel"
+          className="app-button app-button--danger practice-toolbar-cancel"
           onClick={() => setCancelConfirmOpen(true)}
         >
           中止
@@ -289,7 +293,7 @@ export function PracticeMainPage() {
             <div className="app-nav">
               <button
                 type="button"
-                className="app-button"
+                className="app-button app-button--danger"
                 onClick={() => navigate("/practice/start")}
               >
                 中止する
