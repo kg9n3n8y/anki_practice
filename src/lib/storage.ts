@@ -4,6 +4,7 @@ import type {
   PracticeSettings,
   PositionData,
 } from "../types";
+import { defaultEmptyCardCountForMode } from "./practiceDefaults";
 import { normalizePosition } from "./positionIo";
 
 const KEYS = {
@@ -46,10 +47,17 @@ export function hasPosition(): boolean {
 
 function normalizePracticeSettings(raw: PracticeSettings): PracticeSettings {
   const legacy = raw as PracticeSettings & { useTeigi?: boolean };
+  let next = { ...raw };
   if (legacy.usePosition === undefined && legacy.useTeigi !== undefined) {
-    return { ...raw, usePosition: legacy.useTeigi };
+    next = { ...next, usePosition: legacy.useTeigi };
   }
-  return raw;
+  if (next.emptyCardCount === undefined) {
+    next = {
+      ...next,
+      emptyCardCount: defaultEmptyCardCountForMode(next.mode),
+    };
+  }
+  return next;
 }
 
 export function loadPracticeSettings(): PracticeSettings | null {

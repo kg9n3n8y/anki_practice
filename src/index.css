@@ -161,7 +161,19 @@ button.secondary,
 .practice-start-form {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.25rem;
+}
+
+.practice-start-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem 1.25rem;
+}
+
+@media (max-width: 520px) {
+  .practice-start-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .practice-field {

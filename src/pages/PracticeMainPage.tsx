@@ -85,6 +85,7 @@ export function PracticeMainPage() {
       poems,
       fudalist,
       b.settings.confirmOrder,
+      b.settings.emptyCardCount,
     );
     setBoard(setAllFaceDown(b));
     setQuestions(qs);

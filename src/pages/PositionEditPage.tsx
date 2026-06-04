@@ -3,10 +3,12 @@ import {
   DragOverlay,
   PointerSensor,
   closestCenter,
+  pointerWithin,
   useDraggable,
   useDroppable,
   useSensor,
   useSensors,
+  type CollisionDetection,
   type DragEndEvent,
   type DragMoveEvent,
   type DragOverEvent,
@@ -42,7 +44,34 @@ import type { AreaId, Poem } from "../types";
 
 const POOL_ID = "pool";
 
+/** ポインタ位置を優先し、未配置プールへのドロップを拾いやすくする */
+const collisionDetection: CollisionDetection = (args) => {
+  const pointerHits = pointerWithin(args);
+  if (pointerHits.length > 0) return pointerHits;
+  return closestCenter(args);
+};
+
 type DragPreview = { area: AreaId; index: number; no: number };
+
+function isPointerOverPool(pointer: { x: number; y: number }): boolean {
+  const el = document.querySelector(".position-pool");
+  if (!el) return false;
+  const rect = el.getBoundingClientRect();
+  return (
+    pointer.x >= rect.left &&
+    pointer.x <= rect.right &&
+    pointer.y >= rect.top &&
+    pointer.y <= rect.bottom
+  );
+}
+
+function resolveOverContainer(
+  state: PositionAreaState,
+  overId: string,
+): string | null {
+  if (overId === POOL_ID || overId.startsWith("area-")) return overId;
+  return findContainer(state, overId);
+}
 
 function poemId(no: number): string {
   return `poem-${no}`;
@@ -287,10 +316,7 @@ export function PositionEditPage() {
     const activeId = String(active.id);
     const overId = String(over.id);
     const activeContainer = findContainer(state, activeId);
-    const overContainer =
-      overId === POOL_ID || overId.startsWith("area-")
-        ? overId
-        : findContainer(state, overId);
+    const overContainer = resolveOverContainer(state, overId);
 
     if (
       !activeContainer ||
@@ -316,24 +342,34 @@ export function PositionEditPage() {
   const onDragEnd = (event: DragEndEvent) => {
     setDragPreview(null);
     setActivePoem(null);
-    const { active, over } = event;
-    if (!over) return;
 
-    const activeNo = parsePoemId(active.id);
+    const activeNo = parsePoemId(event.active.id);
     if (activeNo === null) return;
 
-    const activeId = String(active.id);
-    const overId = String(over.id);
-    const pointerX = pointerRef.current.x;
+    const activeId = String(event.active.id);
+    const pointer = pointerRef.current;
+    const pointerX = pointer.x;
 
     setAreaState((prev) => {
       const activeContainer = findContainer(prev, activeId);
-      const overContainer =
-        overId === POOL_ID || overId.startsWith("area-")
-          ? overId
-          : findContainer(prev, overId);
+      if (!activeContainer) return prev;
 
-      if (!activeContainer || !overContainer) return prev;
+      let overId = event.over ? String(event.over.id) : "";
+      let overContainer = overId
+        ? resolveOverContainer(prev, overId)
+        : null;
+
+      // ドロップ時に元エリアのチップへ吸われた場合でも、プール上なら未配置へ戻す
+      if (
+        activeContainer !== POOL_ID &&
+        isPointerOverPool(pointer) &&
+        (!overContainer || overContainer === activeContainer)
+      ) {
+        overContainer = POOL_ID;
+        overId = POOL_ID;
+      }
+
+      if (!overContainer) return prev;
 
       if (activeContainer === overContainer) {
         if (activeContainer === POOL_ID) return prev;
@@ -403,7 +439,7 @@ export function PositionEditPage() {
   return (
     <DndContext
       sensors={sensors}
-      collisionDetection={closestCenter}
+      collisionDetection={collisionDetection}
       onDragStart={(e) => {
         const no = parsePoemId(e.active.id);
         setActivePoem(no !== null ? (poemByNo.get(no) ?? null) : null);

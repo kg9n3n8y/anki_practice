@@ -1,11 +1,12 @@
 import type { PracticeMode, PracticeSettings } from "../types";
 
 export const DEFAULT_PRACTICE_SETTINGS: PracticeSettings = {
-  mode: "both",
-  cardCount: 50,
-  memorizeMinutes: 15,
+  mode: "opponent",
+  cardCount: 25,
+  memorizeMinutes: 5,
   usePosition: false,
   confirmOrder: "order",
+  emptyCardCount: 15,
 };
 
 export function cardCountOptions(mode: PracticeMode): number[] {
@@ -15,8 +16,19 @@ export function cardCountOptions(mode: PracticeMode): number[] {
   return Array.from({ length: 5 }, (_, i) => (i + 1) * 5);
 }
 
+export function emptyCardCountOptions(mode: PracticeMode): number[] {
+  if (mode === "both") {
+    return [0, ...Array.from({ length: 5 }, (_, i) => (i + 1) * 10)];
+  }
+  return [0, ...Array.from({ length: 5 }, (_, i) => (i + 1) * 5)];
+}
+
 export function defaultCardCountForMode(mode: PracticeMode): number {
   return mode === "both" ? 50 : 25;
+}
+
+export function defaultEmptyCardCountForMode(mode: PracticeMode): number {
+  return mode === "both" ? 30 : 15;
 }
 
 export function campCounts(

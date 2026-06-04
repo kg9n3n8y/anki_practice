@@ -43,6 +43,8 @@ export interface PracticeSettings {
   memorizeMinutes: number;
   usePosition: boolean;
   confirmOrder: ConfirmOrder;
+  /** 確認モードの空札の枚数（盤外から出題する枚数） */
+  emptyCardCount: number;
 }
 
 export interface PracticeResult {

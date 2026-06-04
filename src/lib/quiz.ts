@@ -5,12 +5,12 @@ export function buildQuestionList(
   boardPoems: Poem[],
   allPoems: Poem[],
   confirmOrder: ConfirmOrder,
+  emptyCardCount: number,
 ): Poem[] {
   const onBoardNos = new Set(boardPoems.map((p) => p.no));
   const boardList = [...boardPoems];
   const others = allPoems.filter((p) => !onBoardNos.has(p.no));
-  const questionCount = boardList.length * 2;
-  const extraCount = questionCount - boardList.length;
+  const extraCount = Math.min(Math.max(0, emptyCardCount), others.length);
   const extras = shuffle(others).slice(0, extraCount);
   const selected = [...boardList, ...extras];
 
