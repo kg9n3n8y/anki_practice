@@ -1,4 +1,4 @@
-# かるた配置暗記
+# かるた暗記練
 
 競技かるたの配置暗記練習 Web アプリ（Vite + React + TypeScript）。
 

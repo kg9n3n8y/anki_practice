@@ -22,8 +22,8 @@ export default defineConfig(({ mode }) => {
         registerType: "autoUpdate",
         includeAssets: ["torifuda/tori_ura.png"],
         manifest: {
-          name: "かるた配置暗記",
-          short_name: "配置暗記",
+          name: "かるた暗記練",
+          short_name: "暗記練",
           description: "競技かるたの配置暗記練習",
           theme_color: "#1a472a",
           background_color: "#f5f0e6",
