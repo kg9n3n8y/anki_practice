@@ -2,11 +2,14 @@ import {
   DndContext,
   DragOverlay,
   PointerSensor,
+  closestCenter,
   useDraggable,
   useDroppable,
   useSensor,
   useSensors,
   type DragEndEvent,
+  type DragMoveEvent,
+  type DragOverEvent,
 } from "@dnd-kit/core";
 import {
   SortableContext,
@@ -15,25 +18,31 @@ import {
   useSortable,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { useMemo, useState, type CSSProperties } from "react";
+import { useMemo, useRef, useState, type CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import { fudalist } from "../data/fudalist";
 import { ALL_AREAS, isLeftArea, SELF_AREA_ROWS } from "../lib/areas";
-import { formatTeigiKimariji } from "../lib/teigiKimariji";
-import { loadTeigi, saveTeigi } from "../lib/storage";
-import { downloadTeigiJson } from "../lib/teigiIo";
+import { copyPositionCompact } from "../lib/positionCompact";
 import {
-  cloneTeigiState,
-  emptyTeigiState,
+  adjustIndexAfterRemoval,
+  resolveInsertIndex,
+} from "../lib/positionDragInsert";
+import { formatPositionKimariji } from "../lib/positionKimariji";
+import {
+  clonePositionState,
+  emptyPositionState,
   poemOrderMap,
   poolNos,
-  stateFromTeigi,
-  teigiFromState,
-  type TeigiAreaState,
-} from "../lib/teigiState";
+  stateFromPosition,
+  positionFromState,
+  type PositionAreaState,
+} from "../lib/positionState";
+import { loadPosition, savePosition } from "../lib/storage";
 import type { AreaId, Poem } from "../types";
 
 const POOL_ID = "pool";
+
+type DragPreview = { area: AreaId; index: number; no: number };
 
 function poemId(no: number): string {
   return `poem-${no}`;
@@ -50,7 +59,7 @@ function areaContainerId(area: AreaId): string {
   return `area-${area}`;
 }
 
-function findContainer(state: TeigiAreaState, id: string): string | null {
+function findContainer(state: PositionAreaState, id: string): string | null {
   if (id === POOL_ID) return POOL_ID;
   if (id.startsWith("area-")) return id;
   const no = parsePoemId(id);
@@ -61,8 +70,26 @@ function findContainer(state: TeigiAreaState, id: string): string | null {
   return POOL_ID;
 }
 
+function displayItemsForArea(
+  areaId: AreaId,
+  poemNos: number[],
+  preview: DragPreview | null,
+): { no: number; isGhost: boolean }[] {
+  if (!preview || preview.area !== areaId) {
+    return poemNos.map((no) => ({ no, isGhost: false }));
+  }
+  const base = poemNos.filter((n) => n !== preview.no);
+  const list = [...base];
+  list.splice(preview.index, 0, preview.no);
+  return list.map((no) => ({
+    no,
+    isGhost: no === preview.no && !poemNos.includes(no),
+  }));
+}
+
 function KimarijiChip({
   kimariji,
+  poemNo,
   style,
   className,
   listeners,
@@ -70,6 +97,7 @@ function KimarijiChip({
   setNodeRef,
 }: {
   kimariji: string;
+  poemNo?: number;
   style?: CSSProperties;
   className?: string;
   listeners?: ReturnType<typeof useDraggable>["listeners"];
@@ -80,7 +108,8 @@ function KimarijiChip({
     <span
       ref={setNodeRef}
       style={style}
-      className={className ?? "teigi-chip teigi-chip--vertical"}
+      className={className ?? "position-chip position-chip--vertical"}
+      {...(poemNo !== undefined ? { "data-poem-no": poemNo } : {})}
       {...listeners}
       {...attributes}
     >
@@ -97,7 +126,8 @@ function PoolDraggableKimariji({ poem }: { poem: Poem }) {
     });
   return (
     <KimarijiChip
-      kimariji={formatTeigiKimariji(poem.kimariji)}
+      kimariji={formatPositionKimariji(poem.kimariji)}
+      poemNo={poem.no}
       setNodeRef={setNodeRef}
       listeners={listeners}
       attributes={attributes}
@@ -120,7 +150,8 @@ function SortableKimariji({ no, poem }: { no: number; poem: Poem }) {
   } = useSortable({ id: poemId(no), data: { no } });
   return (
     <KimarijiChip
-      kimariji={formatTeigiKimariji(poem.kimariji)}
+      kimariji={formatPositionKimariji(poem.kimariji)}
+      poemNo={no}
       setNodeRef={setNodeRef}
       listeners={listeners}
       attributes={attributes}
@@ -137,26 +168,42 @@ function SortableArea({
   areaId,
   poemNos,
   poemByNo,
+  dragPreview,
 }: {
   areaId: AreaId;
   poemNos: number[];
   poemByNo: Map<number, Poem>;
+  dragPreview: DragPreview | null;
 }) {
   const containerId = areaContainerId(areaId);
   const { setNodeRef, isOver } = useDroppable({ id: containerId });
+  const displayItems = displayItemsForArea(areaId, poemNos, dragPreview);
   const sortableIds = poemNos.map(poemId);
 
   return (
     <div
       ref={setNodeRef}
-      className={`teigi-area${isLeftArea(areaId) ? "" : " teigi-area--right"}${isOver ? " teigi-area--over" : ""}`}
+      className={`position-area${isLeftArea(areaId) ? "" : " position-area--right"}${isOver ? " position-area--over" : ""}`}
       data-area={areaId}
     >
-      <SortableContext items={sortableIds} strategy={horizontalListSortingStrategy}>
-        <div className="teigi-area-chips">
-          {poemNos.map((no) => {
+      <SortableContext
+        items={sortableIds}
+        strategy={horizontalListSortingStrategy}
+      >
+        <div className="position-area-chips">
+          {displayItems.map(({ no, isGhost }) => {
             const poem = poemByNo.get(no);
             if (!poem) return null;
+            if (isGhost) {
+              return (
+                <KimarijiChip
+                  key={`ghost-${no}`}
+                  kimariji={formatPositionKimariji(poem.kimariji)}
+                  poemNo={no}
+                  className="position-chip position-chip--vertical position-chip--preview"
+                />
+              );
+            }
             return <SortableKimariji key={no} no={no} poem={poem} />;
           })}
         </div>
@@ -165,7 +212,7 @@ function SortableArea({
   );
 }
 
-export function TeigiEditPage() {
+export function PositionEditPage() {
   const sorted = useMemo(
     () => [...fudalist].sort((a, b) => a.order - b.order),
     [],
@@ -176,14 +223,16 @@ export function TeigiEditPage() {
   );
   const orderMap = useMemo(() => poemOrderMap(sorted), [sorted]);
 
-  const [areaState, setAreaState] = useState<TeigiAreaState>(() => {
-    const saved = loadTeigi();
-    return stateFromTeigi(saved, orderMap);
+  const [areaState, setAreaState] = useState<PositionAreaState>(() => {
+    const saved = loadPosition();
+    return stateFromPosition(saved, orderMap);
   });
 
   const [activePoem, setActivePoem] = useState<Poem | null>(null);
+  const [dragPreview, setDragPreview] = useState<DragPreview | null>(null);
   const [savedMsg, setSavedMsg] = useState("");
   const [resetConfirmOpen, setResetConfirmOpen] = useState(false);
+  const pointerRef = useRef({ x: 0, y: 0 });
 
   const hasPlacements = useMemo(
     () => ALL_AREAS.some((area) => areaState[area].length > 0),
@@ -205,7 +254,67 @@ export function TeigiEditPage() {
       .sort((a, b) => a.order - b.order);
   }, [areaState, sorted, poemByNo]);
 
+  const trackPointer = (event: DragMoveEvent | DragOverEvent) => {
+    const start = event.activatorEvent;
+    if (start && "clientX" in start) {
+      const p = start as PointerEvent;
+      pointerRef.current = {
+        x: p.clientX + event.delta.x,
+        y: p.clientY + event.delta.y,
+      };
+    }
+  };
+
+  const chipsRowFor = (area: AreaId): HTMLElement | null =>
+    document.querySelector(
+      `[data-area="${area}"] .position-area-chips`,
+    ) as HTMLElement | null;
+
+  const updateDragPreview = (
+    event: DragMoveEvent | DragOverEvent,
+    state: PositionAreaState,
+  ) => {
+    const { active, over } = event;
+    if (!over) {
+      setDragPreview(null);
+      return;
+    }
+    const activeNo = parsePoemId(active.id);
+    if (activeNo === null) {
+      setDragPreview(null);
+      return;
+    }
+    const activeId = String(active.id);
+    const overId = String(over.id);
+    const activeContainer = findContainer(state, activeId);
+    const overContainer =
+      overId === POOL_ID || overId.startsWith("area-")
+        ? overId
+        : findContainer(state, overId);
+
+    if (
+      !activeContainer ||
+      !overContainer ||
+      overContainer === POOL_ID ||
+      activeContainer === overContainer
+    ) {
+      setDragPreview(null);
+      return;
+    }
+
+    const toArea = overContainer.replace("area-", "") as AreaId;
+    const items = state[toArea].filter((n) => n !== activeNo);
+    const insertIndex = resolveInsertIndex(
+      items,
+      overId,
+      pointerRef.current.x,
+      chipsRowFor(toArea),
+    );
+    setDragPreview({ area: toArea, index: insertIndex, no: activeNo });
+  };
+
   const onDragEnd = (event: DragEndEvent) => {
+    setDragPreview(null);
     setActivePoem(null);
     const { active, over } = event;
     if (!over) return;
@@ -215,6 +324,7 @@ export function TeigiEditPage() {
 
     const activeId = String(active.id);
     const overId = String(over.id);
+    const pointerX = pointerRef.current.x;
 
     setAreaState((prev) => {
       const activeContainer = findContainer(prev, activeId);
@@ -230,14 +340,19 @@ export function TeigiEditPage() {
         const area = activeContainer.replace("area-", "") as AreaId;
         const items = prev[area];
         const oldIndex = items.indexOf(activeNo);
-        const overNo = parsePoemId(overId);
-        const newIndex =
-          overNo !== null ? items.indexOf(overNo) : items.length - 1;
-        if (oldIndex < 0 || newIndex < 0 || oldIndex === newIndex) return prev;
-        return { ...prev, [area]: arrayMove(items, oldIndex, newIndex) };
+        if (oldIndex < 0) return prev;
+        let insertIndex = resolveInsertIndex(
+          items,
+          overId,
+          pointerX,
+          chipsRowFor(area),
+        );
+        insertIndex = adjustIndexAfterRemoval(oldIndex, insertIndex);
+        if (insertIndex === oldIndex) return prev;
+        return { ...prev, [area]: arrayMove(items, oldIndex, insertIndex) };
       }
 
-      const next = cloneTeigiState(prev);
+      const next = clonePositionState(prev);
 
       if (activeContainer !== POOL_ID) {
         const fromArea = activeContainer.replace("area-", "") as AreaId;
@@ -247,11 +362,12 @@ export function TeigiEditPage() {
       if (overContainer !== POOL_ID) {
         const toArea = overContainer.replace("area-", "") as AreaId;
         const items = [...next[toArea]];
-        const overNo = parsePoemId(overId);
-        const insertIndex =
-          overNo !== null && items.includes(overNo)
-            ? items.indexOf(overNo)
-            : items.length;
+        const insertIndex = resolveInsertIndex(
+          items,
+          overId,
+          pointerX,
+          chipsRowFor(toArea),
+        );
         items.splice(insertIndex, 0, activeNo);
         next[toArea] = items;
       }
@@ -261,45 +377,73 @@ export function TeigiEditPage() {
   };
 
   const save = () => {
-    const data = teigiFromState(areaState);
-    saveTeigi(data);
+    savePosition(positionFromState(areaState));
     setSavedMsg("保存しました");
     window.setTimeout(() => setSavedMsg(""), 2000);
   };
 
-  const exportJson = () => {
-    downloadTeigiJson(teigiFromState(areaState));
+  const copyText = async () => {
+    try {
+      await copyPositionCompact(areaState);
+      setSavedMsg("テキストをコピーしました");
+      window.setTimeout(() => setSavedMsg(""), 2000);
+    } catch (e) {
+      setSavedMsg("");
+      window.alert(
+        e instanceof Error ? e.message : "コピーに失敗しました",
+      );
+    }
   };
 
   const resetAll = () => {
-    setAreaState(emptyTeigiState());
+    setAreaState(emptyPositionState());
     setResetConfirmOpen(false);
   };
 
   return (
     <DndContext
       sensors={sensors}
+      collisionDetection={closestCenter}
       onDragStart={(e) => {
         const no = parsePoemId(e.active.id);
         setActivePoem(no !== null ? (poemByNo.get(no) ?? null) : null);
+        const start = e.activatorEvent;
+        if (start && "clientX" in start) {
+          const p = start as PointerEvent;
+          pointerRef.current = { x: p.clientX, y: p.clientY };
+        }
+      }}
+      onDragMove={(e) => {
+        trackPointer(e);
+        updateDragPreview(e, areaState);
+      }}
+      onDragOver={(e) => {
+        trackPointer(e);
+        updateDragPreview(e, areaState);
       }}
       onDragEnd={onDragEnd}
+      onDragCancel={() => {
+        setDragPreview(null);
+        setActivePoem(null);
+      }}
     >
-      <section className="app-card teigi-edit">
+      <section className="app-card position-edit">
         <h2>定位置編集</h2>
 
-        <div className="teigi-grid">
+        <div className="position-grid">
           {SELF_AREA_ROWS.map((row) => (
-            <div key={`${row.left}-${row.right}`} className="teigi-grid-row">
+            <div key={`${row.left}-${row.right}`} className="position-grid-row">
               <SortableArea
                 areaId={row.left}
                 poemNos={areaState[row.left]}
                 poemByNo={poemByNo}
+                dragPreview={dragPreview}
               />
               <SortableArea
                 areaId={row.right}
                 poemNos={areaState[row.right]}
                 poemByNo={poemByNo}
+                dragPreview={dragPreview}
               />
             </div>
           ))}
@@ -313,8 +457,8 @@ export function TeigiEditPage() {
           <button type="button" className="app-button" onClick={save}>
             保存
           </button>
-          <button type="button" className="secondary" onClick={exportJson}>
-            JSON 出力
+          <button type="button" className="secondary" onClick={copyText}>
+            テキストをコピー
           </button>
           <button
             type="button"
@@ -355,8 +499,8 @@ export function TeigiEditPage() {
 
       <DragOverlay>
         {activePoem ? (
-          <span className="teigi-chip teigi-chip--vertical teigi-chip--overlay">
-            {formatTeigiKimariji(activePoem.kimariji)}
+          <span className="position-chip position-chip--vertical position-chip--overlay">
+            {formatPositionKimariji(activePoem.kimariji)}
           </span>
         ) : null}
       </DragOverlay>
@@ -369,9 +513,9 @@ function PoolDrop({ poems }: { poems: Poem[] }) {
   return (
     <div
       ref={setNodeRef}
-      className={`teigi-pool ${isOver ? "teigi-area--over" : ""}`}
+      className={`position-pool ${isOver ? "position-area--over" : ""}`}
     >
-      <div className="teigi-pool-scroll">
+      <div className="position-pool-scroll">
         {poems.map((p) => (
           <PoolDraggableKimariji key={p.no} poem={p} />
         ))}

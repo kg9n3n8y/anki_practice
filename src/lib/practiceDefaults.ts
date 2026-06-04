@@ -4,7 +4,7 @@ export const DEFAULT_PRACTICE_SETTINGS: PracticeSettings = {
   mode: "both",
   cardCount: 50,
   memorizeMinutes: 15,
-  useTeigi: false,
+  usePosition: false,
   confirmOrder: "order",
 };
 

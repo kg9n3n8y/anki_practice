@@ -83,12 +83,12 @@ button.secondary,
 }
 
 /* 定位置編集: PC では横に広げる（1画面幅を超えない） */
-.app-shell--teigi {
+.app-shell--position {
   max-width: 960px;
 }
 
 @media (min-width: 1024px) {
-  .app-shell--teigi {
+  .app-shell--position {
     max-width: min(1180px, calc(100vw - 2.5rem));
     padding-left: 1.25rem;
     padding-right: 1.25rem;
@@ -447,20 +447,20 @@ button.secondary,
 }
 
 /* --- 定位置編集 --- */
-.teigi-grid {
+.position-grid {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   margin-bottom: 1rem;
 }
 
-.teigi-grid-row {
+.position-grid-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0.5rem;
 }
 
-.teigi-area {
+.position-area {
   border: 1px dashed #b8a88a;
   border-radius: 8px;
   min-height: 5rem;
@@ -468,12 +468,12 @@ button.secondary,
   background: #faf8f4;
 }
 
-.teigi-area--over {
+.position-area--over {
   background: #e8f0e8;
   border-color: #1a472a;
 }
 
-.teigi-area-chips {
+.position-area-chips {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -483,17 +483,17 @@ button.secondary,
   min-height: 2.75rem;
 }
 
-.teigi-area--right .teigi-area-chips {
+.position-area--right .position-area-chips {
   justify-content: flex-end;
 }
 
-.teigi-chip--vertical {
+.position-chip--vertical {
   writing-mode: vertical-rl;
   text-orientation: upright;
   display: inline-block;
 }
 
-.teigi-pool {
+.position-pool {
   border: 1px solid #d8cfc0;
   border-radius: 8px;
   padding: 0.5rem;
@@ -501,7 +501,7 @@ button.secondary,
   background: #fff;
 }
 
-.teigi-pool-scroll {
+.position-pool-scroll {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -512,7 +512,7 @@ button.secondary,
   padding: 0.1rem 0;
 }
 
-.teigi-chip {
+.position-chip {
   font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic UI", "Yu Gothic", "Meiryo", sans-serif;
   font-size: 1rem;
   font-weight: 600;
@@ -526,11 +526,11 @@ button.secondary,
   user-select: none;
 }
 
-.teigi-chip:hover {
+.position-chip:hover {
   color: #0f3520;
 }
 
-.teigi-chip.teigi-chip--vertical {
+.position-chip.position-chip--vertical {
   line-height: 1;
   letter-spacing: 0;
   width: 1em;
@@ -539,10 +539,15 @@ button.secondary,
   text-align: center;
 }
 
-.teigi-chip--overlay {
+.position-chip--overlay {
   color: #0f3520;
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   cursor: grabbing;
+}
+
+.position-chip--preview {
+  opacity: 0.35;
+  pointer-events: none;
 }
 
 .save-msg {
@@ -678,8 +683,11 @@ button.secondary,
 .results-list {
   margin: 0;
   padding-left: 1.25rem;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: #444;
 }
 
 .results-list li {
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.3rem;
 }

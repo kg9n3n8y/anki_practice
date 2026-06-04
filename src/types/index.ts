@@ -18,20 +18,20 @@ export interface Poem {
   order: number;
 }
 
-export interface TeigiPlacement {
+export interface PositionPlacement {
   no: number;
   area: AreaId;
 }
 
-/** v1 形式（インポート時のみ。保存は v2） */
-export interface TeigiDataV1 {
+/** v1 形式（LocalStorage 移行用） */
+export interface PositionDataV1 {
   version: 1;
   updatedAt: string;
-  placements: TeigiPlacement[];
+  placements: PositionPlacement[];
 }
 
 /** 各エリアの歌番号を並び順どおりに保持 */
-export interface TeigiData {
+export interface PositionData {
   version: 2;
   updatedAt: string;
   areas: Record<AreaId, number[]>;
@@ -41,7 +41,7 @@ export interface PracticeSettings {
   mode: PracticeMode;
   cardCount: number;
   memorizeMinutes: number;
-  useTeigi: boolean;
+  usePosition: boolean;
   confirmOrder: ConfirmOrder;
 }
 

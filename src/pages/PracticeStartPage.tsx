@@ -5,16 +5,20 @@ import {
   cardCountOptions,
   defaultCardCountForMode,
 } from "../lib/practiceDefaults";
-import { hasTeigi, loadPracticeSettings, savePracticeSettings } from "../lib/storage";
+import {
+  hasPosition,
+  loadPracticeSettings,
+  savePracticeSettings,
+} from "../lib/storage";
 import type { PracticeMode, PracticeSettings } from "../types";
 
 export function PracticeStartPage() {
   const navigate = useNavigate();
-  const teigiAvailable = hasTeigi();
+  const positionAvailable = hasPosition();
   const [settings, setSettings] = useState<PracticeSettings>(() => {
     const saved = loadPracticeSettings();
     const base = saved ?? DEFAULT_PRACTICE_SETTINGS;
-    if (!teigiAvailable) return { ...base, useTeigi: false };
+    if (!positionAvailable) return { ...base, usePosition: false };
     return base;
   });
 
@@ -41,7 +45,7 @@ export function PracticeStartPage() {
       if (key === "mode") {
         const mode = value as PracticeMode;
         next.cardCount = defaultCardCountForMode(mode);
-        if (mode !== "self" && !teigiAvailable) next.useTeigi = false;
+        if (mode !== "self" && !positionAvailable) next.usePosition = false;
       }
       return next;
     });
@@ -117,16 +121,16 @@ export function PracticeStartPage() {
         <label className="practice-field practice-field--checkbox">
           <input
             type="checkbox"
-            checked={settings.useTeigi}
-            disabled={!teigiAvailable || settings.mode === "opponent"}
-            onChange={(e) => update("useTeigi", e.target.checked)}
+            checked={settings.usePosition}
+            disabled={!positionAvailable || settings.mode === "opponent"}
+            onChange={(e) => update("usePosition", e.target.checked)}
           />
           <span className="practice-field-checkbox-text">
             自陣の定位置を適用
-            {!teigiAvailable && (
+            {!positionAvailable && (
               <span className="hint">定位置が未保存です</span>
             )}
-            {settings.mode === "opponent" && teigiAvailable && (
+            {settings.mode === "opponent" && positionAvailable && (
               <span className="hint">相手陣のみのときは使えません</span>
             )}
           </span>

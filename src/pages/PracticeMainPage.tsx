@@ -12,7 +12,7 @@ import {
   setAllFaceDown,
 } from "../lib/placement";
 import { buildQuestionList } from "../lib/quiz";
-import { loadTeigi, appendResult } from "../lib/storage";
+import { loadPosition, appendResult } from "../lib/storage";
 import type { GeneratedBoard } from "../types/board";
 import type { BoardCard } from "../types/board";
 import type { FeedbackKind, PracticePhase } from "../types/board";
@@ -30,8 +30,8 @@ export function PracticeMainPage() {
 
   const initialBoard = useMemo(() => {
     if (!settings) return null;
-    const teigi = settings.useTeigi ? loadTeigi() : null;
-    return generateBoard(fudalist, settings, teigi);
+    const position = settings.usePosition ? loadPosition() : null;
+    return generateBoard(fudalist, settings, position);
   }, [settings]);
 
   const [phase, setPhase] = useState<PracticePhase>("memorize");

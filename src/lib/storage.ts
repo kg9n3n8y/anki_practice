@@ -1,38 +1,62 @@
 import { fudalist } from "../data/fudalist";
-import type { PracticeResult, PracticeSettings, TeigiData } from "../types";
-import { normalizeTeigi } from "./teigiIo";
+import type {
+  PracticeResult,
+  PracticeSettings,
+  PositionData,
+} from "../types";
+import { normalizePosition } from "./positionIo";
 
 const KEYS = {
-  teigi: "teigi",
+  position: "position",
+  positionLegacy: "teigi",
   practiceSettings: "practiceSettings",
   results: "results",
 } as const;
 
 const MAX_RESULTS = 5;
 
-export function loadTeigi(): TeigiData | null {
+export function loadPosition(): PositionData | null {
   try {
-    const raw = localStorage.getItem(KEYS.teigi);
-    if (!raw) return null;
-    return normalizeTeigi(JSON.parse(raw), fudalist);
+    let raw = localStorage.getItem(KEYS.position);
+    if (!raw) {
+      raw = localStorage.getItem(KEYS.positionLegacy);
+      if (raw) {
+        const migrated = normalizePosition(JSON.parse(raw), fudalist);
+        if (migrated) {
+          savePosition(migrated);
+          localStorage.removeItem(KEYS.positionLegacy);
+        }
+        return migrated;
+      }
+      return null;
+    }
+    return normalizePosition(JSON.parse(raw), fudalist);
   } catch {
     return null;
   }
 }
 
-export function saveTeigi(data: TeigiData): void {
-  localStorage.setItem(KEYS.teigi, JSON.stringify(data));
+export function savePosition(data: PositionData): void {
+  localStorage.setItem(KEYS.position, JSON.stringify(data));
 }
 
-export function hasTeigi(): boolean {
-  return loadTeigi() !== null;
+export function hasPosition(): boolean {
+  return loadPosition() !== null;
+}
+
+function normalizePracticeSettings(raw: PracticeSettings): PracticeSettings {
+  const legacy = raw as PracticeSettings & { useTeigi?: boolean };
+  if (legacy.usePosition === undefined && legacy.useTeigi !== undefined) {
+    return { ...raw, usePosition: legacy.useTeigi };
+  }
+  return raw;
 }
 
 export function loadPracticeSettings(): PracticeSettings | null {
   try {
     const raw = localStorage.getItem(KEYS.practiceSettings);
     if (!raw) return null;
-    return JSON.parse(raw) as PracticeSettings;
+    return normalizePracticeSettings(JSON.parse(raw) as PracticeSettings);
   } catch {
     return null;
   }

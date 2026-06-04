@@ -1,5 +1,5 @@
 import type { AreaBoard, BoardCard, GeneratedBoard } from "../types/board";
-import type { AreaId, Poem, PracticeSettings, TeigiData } from "../types";
+import type { AreaId, Poem, PracticeSettings, PositionData } from "../types";
 import {
   ALL_AREAS,
   LEFT_AREAS,
@@ -9,7 +9,7 @@ import {
 } from "./areas";
 import { campCounts } from "./practiceDefaults";
 import { shuffle } from "./shuffle";
-import { emptyTeigiState, poemOrderMap, stateFromTeigi } from "./teigiState";
+import { emptyPositionState, poemOrderMap, stateFromPosition } from "./positionState";
 
 let cardSeq = 0;
 function newCardId(): string {
@@ -149,18 +149,18 @@ function pickAreaForCard(
   return candidates[candidates.length - 1];
 }
 
-function teigiAreaState(
-  teigi: TeigiData | null,
+function positionAreaState(
+  position: PositionData | null,
   poems: Poem[],
-): ReturnType<typeof stateFromTeigi> {
-  if (!teigi) return emptyTeigiState();
-  return stateFromTeigi(teigi, poemOrderMap(poems));
+): ReturnType<typeof stateFromPosition> {
+  if (!position) return emptyPositionState();
+  return stateFromPosition(position, poemOrderMap(poems));
 }
 
 function placeCamp(
   poems: Poem[],
-  teigi: TeigiData | null,
-  useTeigi: boolean,
+  position: PositionData | null,
+  usePosition: boolean,
 ): AreaBoard {
   const board = emptyAreaMap<BoardCard>();
   const targets = computeAreaTargets(poems.length);
@@ -172,10 +172,10 @@ function placeCamp(
   const poemByNo = new Map(poems.map((p) => [p.no, p]));
   const placed = new Set<number>();
 
-  if (useTeigi && teigi) {
-    const teigiState = teigiAreaState(teigi, poems);
+  if (usePosition && position) {
+    const positionState = positionAreaState(position, poems);
     for (const area of ALL_AREAS) {
-      for (const no of teigiState[area]) {
+      for (const no of positionState[area]) {
         if ((remaining.get(area) ?? 0) <= 0) continue;
         const poem = poemByNo.get(no);
         if (!poem) continue;
@@ -207,7 +207,7 @@ function pickRandomPoems(all: Poem[], count: number): Poem[] {
 export function generateBoard(
   allPoems: Poem[],
   settings: PracticeSettings,
-  teigi: TeigiData | null,
+  position: PositionData | null,
 ): GeneratedBoard {
   cardSeq = 0;
   const { opponent: oppCount, self: selfCount } = campCounts(
@@ -220,8 +220,8 @@ export function generateBoard(
   const selfPoems = selected.slice(oppCount);
 
   return {
-    opponent: placeCamp(opponentPoems, teigi, false),
-    self: placeCamp(selfPoems, teigi, settings.useTeigi),
+    opponent: placeCamp(opponentPoems, position, false),
+    self: placeCamp(selfPoems, position, settings.usePosition),
     settings,
   };
 }
