@@ -119,6 +119,24 @@ export function PracticeMainPage() {
     setAnswering(false);
   }, [questions.length]);
 
+  const goToResult = useCallback(() => {
+    if (!board) return;
+    const elapsed = confirmStartedAt
+      ? Math.round((Date.now() - confirmStartedAt) / 1000)
+      : 0;
+    setConfirmSeconds(elapsed);
+    appendResult({
+      at: new Date().toISOString(),
+      mode: board.settings.mode,
+      cardCount: board.settings.cardCount,
+      memorizeMinutes: board.settings.memorizeMinutes,
+      questionCount: questions.length,
+      correctCount,
+      confirmSeconds: elapsed,
+    });
+    setPhase("result");
+  }, [board, confirmStartedAt, correctCount, questions.length]);
+
   const handleAnswer = useCallback(
     (tapped: BoardCard | "none") => {
       if (!board || phase !== "confirm" || answering) return;
@@ -161,20 +179,6 @@ export function PracticeMainPage() {
         const total = countOnBoard(result.board);
         const up = countFaceUp(result.board);
         if (up >= total) {
-          const elapsed = confirmStartedAt
-            ? Math.round((Date.now() - confirmStartedAt) / 1000)
-            : 0;
-          setConfirmSeconds(elapsed);
-          appendResult({
-            at: new Date().toISOString(),
-            mode: result.board.settings.mode,
-            cardCount: result.board.settings.cardCount,
-            memorizeMinutes: result.board.settings.memorizeMinutes,
-            questionCount: questions.length,
-            correctCount: newCorrect,
-            confirmSeconds: elapsed,
-          });
-          setPhase("result");
           setAnswering(false);
         } else {
           goNextQuestion();
@@ -188,10 +192,14 @@ export function PracticeMainPage() {
       questions,
       questionIndex,
       correctCount,
-      confirmStartedAt,
       goNextQuestion,
     ],
   );
+
+  const allCardsFaceUp =
+    phase === "confirm" &&
+    board !== null &&
+    countFaceUp(board) >= countOnBoard(board);
 
   if (!settings || !board) {
     return (
@@ -243,7 +251,7 @@ export function PracticeMainPage() {
               完了
             </button>
           )}
-          {phase === "confirm" && currentQuestion && (
+          {phase === "confirm" && currentQuestion && !allCardsFaceUp && (
             <button
               type="button"
               className="app-button"
@@ -276,13 +284,23 @@ export function PracticeMainPage() {
           )}
         </div>
 
-        <button
-          type="button"
-          className="app-button app-button--danger practice-toolbar-cancel"
-          onClick={() => setCancelConfirmOpen(true)}
-        >
-          中止
-        </button>
+        {phase === "confirm" && allCardsFaceUp ? (
+          <button
+            type="button"
+            className="app-button practice-toolbar-cancel"
+            onClick={goToResult}
+          >
+            結果
+          </button>
+        ) : (
+          <button
+            type="button"
+            className="app-button app-button--danger practice-toolbar-cancel"
+            onClick={() => setCancelConfirmOpen(true)}
+          >
+            中止
+          </button>
+        )}
       </div>
 
       {completeConfirmOpen && (
@@ -343,7 +361,7 @@ export function PracticeMainPage() {
           opponent={board.opponent}
           self={board.self}
           mode={settings.mode}
-          interactive={phase === "confirm"}
+          interactive={phase === "confirm" && !allCardsFaceUp}
           onCardClick={(card) => handleAnswer(card)}
           cardOverlays={phase === "confirm" ? cardOverlays : undefined}
         />
