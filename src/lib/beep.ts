@@ -55,3 +55,10 @@ export function beepIncorrect(): void {
   playTone(220, 0, 0.14, { type: "triangle", peakGain: 0.1 });
   playTone(185, 0.1, 0.16, { type: "triangle", peakGain: 0.08 });
 }
+
+/** 近接正解（隣の札）: 中間の短い2音 */
+export function beepNear(): void {
+  if (!resume()) return;
+  playTone(349.23, 0, 0.09, { type: "sine", peakGain: 0.11 });
+  playTone(415.3, 0.08, 0.11, { type: "sine", peakGain: 0.11 });
+}

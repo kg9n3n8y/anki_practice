@@ -1,8 +1,15 @@
-import type { AreaBoard, BoardCard } from "../types/board";
+import type { AreaBoard, BoardCard, FeedbackKind } from "../types/board";
 import type { AreaId, PracticeMode } from "../types";
 import { areaPackClass } from "../lib/areas";
 import { poemImageSrc, uraImageSrc } from "../lib/poemImage";
 import { FudaImage } from "./FudaImage";
+
+type OverlayMark = Exclude<FeedbackKind, null>;
+
+const OVERLAY_SYMBOL: Record<Exclude<OverlayMark, "correct">, string> = {
+  incorrect: "×",
+  near: "△",
+};
 
 type BoardProps = {
   opponent: AreaBoard;
@@ -10,6 +17,8 @@ type BoardProps = {
   mode: PracticeMode;
   interactive?: boolean;
   onCardClick?: (card: BoardCard, camp: "opponent" | "self") => void;
+  /** 解答済みで表向きの札へのマーク（cardId → 正誤。確認モード終了まで保持） */
+  cardOverlays?: Partial<Record<string, OverlayMark>>;
 };
 
 function BoardArea({
@@ -18,12 +27,14 @@ function BoardArea({
   camp,
   interactive,
   onCardClick,
+  cardOverlays,
 }: {
   areaId: AreaId;
   areaBoard: AreaBoard;
   camp: "opponent" | "self";
   interactive?: boolean;
   onCardClick?: (card: BoardCard, camp: "opponent" | "self") => void;
+  cardOverlays?: Partial<Record<string, OverlayMark>>;
 }) {
   const cards = areaBoard[areaId];
   const outerPack = areaPackClass(areaId, camp);
@@ -35,6 +46,7 @@ function BoardArea({
           ? poemImageSrc(card.poem, camp)
           : uraImageSrc();
         const clickable = interactive && !card.faceUp;
+        const overlay = cardOverlays?.[card.id] ?? null;
         return (
           <button
             key={card.id}
@@ -49,6 +61,14 @@ function BoardArea({
               alt={card.poem.kimariji}
               boardSized
             />
+            {overlay && card.faceUp && (
+              <span
+                className={`board-card-mark board-card-mark--${overlay}`}
+                aria-hidden
+              >
+                {overlay !== "correct" && OVERLAY_SYMBOL[overlay]}
+              </span>
+            )}
           </button>
         );
       })}
@@ -68,6 +88,7 @@ export function Board({
   mode,
   interactive,
   onCardClick,
+  cardOverlays,
 }: BoardProps) {
   const showOpponent = mode === "opponent" || mode === "both";
   const showSelf = mode === "self" || mode === "both";
@@ -84,6 +105,7 @@ export function Board({
                 camp="opponent"
                 interactive={interactive}
                 onCardClick={onCardClick}
+                cardOverlays={cardOverlays}
               />
               <BoardArea
                 areaId={row.left}
@@ -91,6 +113,7 @@ export function Board({
                 camp="opponent"
                 interactive={interactive}
                 onCardClick={onCardClick}
+                cardOverlays={cardOverlays}
               />
             </div>
           ))}
@@ -109,6 +132,7 @@ export function Board({
                 camp="self"
                 interactive={interactive}
                 onCardClick={onCardClick}
+                cardOverlays={cardOverlays}
               />
               <BoardArea
                 areaId={row.right}
@@ -116,6 +140,7 @@ export function Board({
                 camp="self"
                 interactive={interactive}
                 onCardClick={onCardClick}
+                cardOverlays={cardOverlays}
               />
             </div>
           ))}

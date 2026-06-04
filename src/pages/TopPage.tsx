@@ -72,7 +72,14 @@ export function TopPage() {
           <ul className="results-list">
             {results.map((r) => (
               <li key={r.at}>
-                {new Date(r.at).toLocaleString("ja-JP")} — {modeLabel(r.mode)}{" "}
+                {new Date(r.at).toLocaleString("ja-JP", {
+                  year: "numeric",
+                  month: "numeric",
+                  day: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}{" "}
+                — {modeLabel(r.mode)}{" "}
                 {r.cardCount}枚 / 暗記 {r.memorizeMinutes}分 / 正答{" "}
                 {r.correctCount}/{r.questionCount}（
                 {Math.round((r.correctCount / r.questionCount) * 100)}%）/ 確認{" "}

@@ -1,8 +1,16 @@
-import { useCallback, useEffect, useMemo, useState, type CSSProperties } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  type CSSProperties,
+} from "react";
+import { flushSync } from "react-dom";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Board } from "../components/Board";
 import { fudalist } from "../data/fudalist";
-import { beepCorrect, beepIncorrect } from "../lib/beep";
+import { beepCorrect, beepIncorrect, beepNear } from "../lib/beep";
+import { preloadBoardImages } from "../lib/preloadBoardImages";
 import { evaluateAnswer } from "../lib/confirmAnswer";
 import {
   allBoardCards,
@@ -44,7 +52,9 @@ export function PracticeMainPage() {
   const [questionIndex, setQuestionIndex] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
   const [feedback, setFeedback] = useState<FeedbackKind>(null);
-  const [feedbackMessage, setFeedbackMessage] = useState("");
+  const [cardOverlays, setCardOverlays] = useState<
+    Partial<Record<string, Exclude<FeedbackKind, null>>>
+  >({});
   const [confirmStartedAt, setConfirmStartedAt] = useState<number | null>(null);
   const [confirmSeconds, setConfirmSeconds] = useState(0);
   const [answering, setAnswering] = useState(false);
@@ -87,10 +97,14 @@ export function PracticeMainPage() {
       b.settings.confirmOrder,
       b.settings.emptyCardCount,
     );
-    setBoard(setAllFaceDown(b));
+    const faceDown = setAllFaceDown(b);
+    preloadBoardImages(faceDown);
+    setBoard(faceDown);
     setQuestions(qs);
     setQuestionIndex(0);
     setCorrectCount(0);
+    setFeedback(null);
+    setCardOverlays({});
     setConfirmStartedAt(Date.now());
     setPhase("confirm");
   }, []);
@@ -98,7 +112,6 @@ export function PracticeMainPage() {
   const goNextQuestion = useCallback(() => {
     setQuestionIndex((i) => (questions.length ? (i + 1) % questions.length : 0));
     setFeedback(null);
-    setFeedbackMessage("");
     setAnswering(false);
   }, [questions.length]);
 
@@ -110,16 +123,34 @@ export function PracticeMainPage() {
 
       setAnswering(true);
       const result = evaluateAnswer(board, q, tapped);
-      const newCorrect = result.correct ? correctCount + 1 : correctCount;
-      setBoard(result.board);
-      if (result.correct) {
-        setCorrectCount(newCorrect);
+
+      flushSync(() => {
+        setBoard(result.board);
+      });
+
+      let scoreDelta = 0;
+      if (result.outcome === "correct") {
+        scoreDelta = 1;
         beepCorrect();
         setFeedback("correct");
+      } else if (result.outcome === "near") {
+        scoreDelta = 0.5;
+        beepNear();
+        setFeedback("near");
       } else {
         beepIncorrect();
         setFeedback("incorrect");
-        setFeedbackMessage(result.message);
+      }
+      if (result.flippedCardId) {
+        setCardOverlays((prev) => ({
+          ...prev,
+          [result.flippedCardId!]: result.outcome,
+        }));
+      }
+
+      const newCorrect = correctCount + scoreDelta;
+      if (scoreDelta > 0) {
+        setCorrectCount(newCorrect);
       }
 
       window.setTimeout(() => {
@@ -178,11 +209,15 @@ export function PracticeMainPage() {
     const rate = questions.length
       ? Math.round((correctCount / questions.length) * 100)
       : 0;
+    const scoreText =
+      correctCount % 1 === 0
+        ? String(correctCount)
+        : correctCount.toFixed(1);
     return (
       <section className="app-card">
         <h2>結果</h2>
         <p>
-          正答率: {correctCount} / {questions.length}（{rate}%）
+          正答率: {scoreText} / {questions.length}（{rate}%）
         </p>
         <p>確認モード: {confirmSeconds} 秒</p>
         <div className="app-nav">
@@ -229,23 +264,17 @@ export function PracticeMainPage() {
             </span>
           )}
           {phase === "confirm" && currentQuestion && (
-            <>
-              <div className="confirm-prompt">
-                <span className="confirm-label">決まり字</span>
-                <strong className="confirm-kimariji">
-                  {currentQuestion.kimariji}
-                </strong>
-              </div>
-              {feedback && (
-                <span
-                  className={`feedback feedback--${feedback}`}
-                  role="status"
-                >
-                  {feedback === "correct" ? "⭕️" : "❌"}
-                  {feedbackMessage && ` ${feedbackMessage}`}
-                </span>
-              )}
-            </>
+            <strong
+              className={
+                feedback
+                  ? `confirm-kimariji confirm-kimariji--${feedback}`
+                  : "confirm-kimariji"
+              }
+              role="status"
+              aria-live="polite"
+            >
+              {currentQuestion.kimariji}
+            </strong>
           )}
         </div>
 
@@ -318,6 +347,7 @@ export function PracticeMainPage() {
           mode={settings.mode}
           interactive={phase === "confirm"}
           onCardClick={(card) => handleAnswer(card)}
+          cardOverlays={phase === "confirm" ? cardOverlays : undefined}
         />
       </div>
     </div>

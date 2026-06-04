@@ -16,4 +16,4 @@ export interface GeneratedBoard {
 
 export type PracticePhase = "memorize" | "confirm" | "result";
 
-export type FeedbackKind = "correct" | "incorrect" | null;
+export type FeedbackKind = "correct" | "incorrect" | "near" | null;
