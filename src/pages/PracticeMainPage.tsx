@@ -14,7 +14,11 @@ import {
   formatCorrectCount,
   formatCorrectRatePercent,
 } from "../lib/scoreDisplay";
-import { preloadBoardImages } from "../lib/preloadBoardImages";
+import {
+  preloadBoardImages,
+  preloadUraImage,
+  waitForBoardUraImages,
+} from "../lib/preloadBoardImages";
 import { evaluateAnswer } from "../lib/confirmAnswer";
 import {
   allBoardCards,
@@ -64,7 +68,12 @@ export function PracticeMainPage() {
   const [answering, setAnswering] = useState(false);
   const [cancelConfirmOpen, setCancelConfirmOpen] = useState(false);
   const [completeConfirmOpen, setCompleteConfirmOpen] = useState(false);
+  const [confirmRevealReady, setConfirmRevealReady] = useState(true);
   const { containerRef, fudaWidth } = useBoardFudaWidth();
+
+  useEffect(() => {
+    void preloadUraImage();
+  }, []);
 
   useEffect(() => {
     if (!settings) {
@@ -109,9 +118,27 @@ export function PracticeMainPage() {
     setCorrectCount(0);
     setFeedback(null);
     setCardOverlays({});
-    setConfirmStartedAt(Date.now());
+    setConfirmRevealReady(false);
     setPhase("confirm");
   }, []);
+
+  useEffect(() => {
+    if (phase !== "confirm" || confirmRevealReady || !board) return;
+
+    let cancelled = false;
+    void (async () => {
+      await preloadUraImage();
+      if (cancelled) return;
+      await waitForBoardUraImages(containerRef.current);
+      if (cancelled) return;
+      setConfirmStartedAt(Date.now());
+      setConfirmRevealReady(true);
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [phase, confirmRevealReady, board, containerRef]);
 
   const goNextQuestion = useCallback(() => {
     setQuestionIndex((i) => (questions.length ? (i + 1) % questions.length : 0));
@@ -251,7 +278,11 @@ export function PracticeMainPage() {
               完了
             </button>
           )}
-          {phase === "confirm" && currentQuestion && !allCardsFaceUp && (
+          {phase === "confirm" &&
+            confirmRevealReady &&
+            currentQuestion &&
+            !allCardsFaceUp &&
+            settings.emptyCardCount > 0 && (
             <button
               type="button"
               className="app-button"
@@ -269,7 +300,7 @@ export function PracticeMainPage() {
               残り {mm}:{ss.toString().padStart(2, "0")}
             </span>
           )}
-          {phase === "confirm" && currentQuestion && (
+          {phase === "confirm" && confirmRevealReady && currentQuestion && (
             <strong
               className={
                 feedback
@@ -361,7 +392,9 @@ export function PracticeMainPage() {
           opponent={board.opponent}
           self={board.self}
           mode={settings.mode}
-          interactive={phase === "confirm" && !allCardsFaceUp}
+          interactive={
+            phase === "confirm" && confirmRevealReady && !allCardsFaceUp
+          }
           onCardClick={(card) => handleAnswer(card)}
           cardOverlays={phase === "confirm" ? cardOverlays : undefined}
         />
