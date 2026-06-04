@@ -3,6 +3,11 @@ import { Link } from "react-router-dom";
 import { fudalist } from "../data/fudalist";
 import { modeLabel } from "../lib/poemImage";
 import { parsePositionText } from "../lib/positionIo";
+import { PwaInstallHint } from "../components/PwaInstallHint";
+import {
+  formatCorrectCount,
+  formatCorrectRatePercent,
+} from "../lib/scoreDisplay";
 import { hasPosition, loadResults, savePosition } from "../lib/storage";
 
 const APP_SHARE_URL = "https://kg9n3n8y.github.io/anki_practice/";
@@ -99,8 +104,9 @@ export function TopPage() {
                 })}{" "}
                 — {modeLabel(r.mode)}{" "}
                 {r.cardCount}枚 / 暗記 {r.memorizeMinutes}分 / 正答{" "}
-                {r.correctCount}/{r.questionCount}（
-                {Math.round((r.correctCount / r.questionCount) * 100)}%）/ 確認{" "}
+                {formatCorrectCount(r.correctCount)}/{r.questionCount}（
+                {formatCorrectRatePercent(r.correctCount, r.questionCount)}
+                %）/ 確認{" "}
                 {r.confirmSeconds}秒
               </li>
             ))}
@@ -166,6 +172,8 @@ export function TopPage() {
           </div>
         </div>
       )}
+
+      <PwaInstallHint />
     </>
   );
 }

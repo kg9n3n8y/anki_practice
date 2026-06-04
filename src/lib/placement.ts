@@ -61,7 +61,7 @@ const AREA_COUNT = ALL_AREAS.length;
 
 /**
  * 各エリアの目標枚数（合計 count、各エリア最大7）
- * count >= 6 のときは全エリアに最低1枚を置き、残りをばらつきありで配分
+ * count >= 6エリア分 のときは全エリアに最低1枚を置き、残りをばらつきありで配分
  */
 function computeAreaTargets(count: number): Record<AreaId, number> {
   const targets = Object.fromEntries(
@@ -157,11 +157,47 @@ function positionAreaState(
   return stateFromPosition(position, poemOrderMap(poems));
 }
 
-function placeCamp(
+function remainingHeadroom(board: AreaBoard): Map<AreaId, number> {
+  const remaining = new Map<AreaId, number>();
+  for (const a of ALL_AREAS) {
+    remaining.set(a, Math.max(0, MAX_CARDS_PER_AREA - board[a].length));
+  }
+  return remaining;
+}
+
+/** 定位置 ON：選出札のうち登録があるものを必ずそのエリアへ（空エリア可）。残りは空きスロットへランダム */
+function placeCampWithPosition(
   poems: Poem[],
-  position: PositionData | null,
-  usePosition: boolean,
+  position: PositionData,
 ): AreaBoard {
+  const board = emptyAreaMap<BoardCard>();
+  const poemByNo = new Map(poems.map((p) => [p.no, p]));
+  const placed = new Set<number>();
+  const positionState = positionAreaState(position, poems);
+
+  for (const area of ALL_AREAS) {
+    for (const no of positionState[area]) {
+      const poem = poemByNo.get(no);
+      if (!poem) continue;
+      board[area].push({ id: newCardId(), poem, faceUp: true });
+      placed.add(no);
+    }
+  }
+
+  const unassigned = poems.filter((p) => !placed.has(p.no));
+  const shuffled = shuffle(unassigned);
+  for (const poem of shuffled) {
+    const headroom = remainingHeadroom(board);
+    const candidates = ALL_AREAS.filter((a) => (headroom.get(a) ?? 0) > 0);
+    if (candidates.length === 0) break;
+    const area = pickAreaForCard(candidates, headroom);
+    board[area].push({ id: newCardId(), poem, faceUp: true });
+  }
+
+  return board;
+}
+
+function placeCampRandom(poems: Poem[]): AreaBoard {
   const board = emptyAreaMap<BoardCard>();
   const targets = computeAreaTargets(poems.length);
   const remaining = new Map<AreaId, number>();
@@ -169,26 +205,7 @@ function placeCamp(
     remaining.set(a, targets[a]);
   }
 
-  const poemByNo = new Map(poems.map((p) => [p.no, p]));
-  const placed = new Set<number>();
-
-  if (usePosition && position) {
-    const positionState = positionAreaState(position, poems);
-    for (const area of ALL_AREAS) {
-      for (const no of positionState[area]) {
-        if ((remaining.get(area) ?? 0) <= 0) continue;
-        const poem = poemByNo.get(no);
-        if (!poem) continue;
-        board[area].push({ id: newCardId(), poem, faceUp: true });
-        remaining.set(area, (remaining.get(area) ?? 0) - 1);
-        placed.add(no);
-      }
-    }
-  }
-
-  const unassigned = poems.filter((p) => !placed.has(p.no));
-
-  const shuffled = shuffle(unassigned);
+  const shuffled = shuffle(poems);
   for (const poem of shuffled) {
     const candidates = ALL_AREAS.filter((a) => (remaining.get(a) ?? 0) > 0);
     if (candidates.length === 0) break;
@@ -198,6 +215,17 @@ function placeCamp(
   }
 
   return board;
+}
+
+function placeCamp(
+  poems: Poem[],
+  position: PositionData | null,
+  usePosition: boolean,
+): AreaBoard {
+  if (usePosition && position) {
+    return placeCampWithPosition(poems, position);
+  }
+  return placeCampRandom(poems);
 }
 
 function pickRandomPoems(all: Poem[], count: number): Poem[] {

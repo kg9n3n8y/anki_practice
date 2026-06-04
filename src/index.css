@@ -345,7 +345,7 @@ button.secondary,
 
 .practice-main .practice-toolbar {
   width: 100%;
-  max-width: calc(var(--fuda-w) * 13);
+  max-width: calc(var(--fuda-w) * 15);
 }
 
 .practice-toolbar.app-card {
@@ -426,7 +426,7 @@ button.secondary,
 }
 
 .karuta-board {
-  width: calc(var(--fuda-w) * 13);
+  width: calc(var(--fuda-w) * 15);
   max-width: 100%;
   margin: 0 auto;
   padding: 0.25rem 0;
@@ -456,7 +456,7 @@ button.secondary,
   flex-wrap: nowrap;
   align-items: flex-end;
   gap: 1px;
-  width: calc(var(--fuda-w) * 6);
+  width: calc(var(--fuda-w) * 7);
   flex-shrink: 0;
   min-height: calc(var(--fuda-w) * 1.4);
   padding: 0;
@@ -660,6 +660,22 @@ button.secondary,
   width: 100%;
   max-height: 90vh;
   overflow: auto;
+}
+
+.pwa-hint-modal {
+  max-width: 400px;
+}
+
+.pwa-hint-lead {
+  margin: 0 0 0.5rem;
+  font-size: 0.95rem;
+}
+
+.pwa-hint-body {
+  margin: 0 0 1rem;
+  font-size: 0.9rem;
+  color: #444;
+  line-height: 1.5;
 }
 
 .import-textarea {

@@ -10,6 +10,10 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Board } from "../components/Board";
 import { fudalist } from "../data/fudalist";
 import { beepCorrect, beepIncorrect, beepNear } from "../lib/beep";
+import {
+  formatCorrectCount,
+  formatCorrectRatePercent,
+} from "../lib/scoreDisplay";
 import { preloadBoardImages } from "../lib/preloadBoardImages";
 import { evaluateAnswer } from "../lib/confirmAnswer";
 import {
@@ -206,18 +210,12 @@ export function PracticeMainPage() {
   const ss = secondsLeft % 60;
 
   if (phase === "result") {
-    const rate = questions.length
-      ? Math.round((correctCount / questions.length) * 100)
-      : 0;
-    const scoreText =
-      correctCount % 1 === 0
-        ? String(correctCount)
-        : correctCount.toFixed(1);
     return (
       <section className="app-card">
         <h2>結果</h2>
         <p>
-          正答率: {scoreText} / {questions.length}（{rate}%）
+          正答率: {formatCorrectCount(correctCount)} / {questions.length}（
+          {formatCorrectRatePercent(correctCount, questions.length)}%）
         </p>
         <p>確認モード: {confirmSeconds} 秒</p>
         <div className="app-nav">

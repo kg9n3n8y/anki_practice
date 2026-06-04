@@ -1,8 +1,8 @@
 import type { AreaId } from "../types";
 
-export const MAX_CARDS_PER_AREA = 6;
+export const MAX_CARDS_PER_AREA = 7;
 
-/** 1段の幅 = 左6枚 + 隙間1枚 + 右6枚 */
+/** 1段の幅 = 左7枚 + 隙間1枚 + 右7枚 */
 export const BOARD_ROW_UNITS = MAX_CARDS_PER_AREA * 2 + 1;
 
 export const LEFT_AREAS: AreaId[] = [

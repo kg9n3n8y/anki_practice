@@ -6,7 +6,7 @@ const MIN_FUDA_WIDTH = 20;
 /** 1画面に収めるため、算出幅をわずかに縮小（縦横ともに約5%） */
 const BOARD_DISPLAY_SCALE = 0.95;
 
-/** コンテナ幅から取り札1枚の幅を算出（13単位レイアウト） */
+/** コンテナ幅から取り札1枚の幅を算出（BOARD_ROW_UNITS 単位レイアウト） */
 export function fudaWidthFromContainer(containerWidth: number): number {
   if (containerWidth <= 0) return MIN_FUDA_WIDTH;
   const fitted = Math.floor(containerWidth / BOARD_ROW_UNITS);
