@@ -31,12 +31,21 @@ npm run dev
 ### 推奨: GitHub Actions で自動デプロイ
 
 1. GitHub リポジトリ → **Settings** → **Pages**
-2. **Build and deployment** → **Source** を **GitHub Actions** に設定（「Deploy from a branch」ではない）
-3. `main` ブランチに push すると `.github/workflows/deploy.yml` が実行される
-4. **Actions** タブで「Deploy to GitHub Pages」が成功するまで待つ
-5. 上記 URL を開く（反映に 1〜2 分かかることがあります）
+2. **Build and deployment** → **Source** を **GitHub Actions** に設定  
+   - **「Deploy from a branch」＋ `main` / `/ (root)` のままだと真っ白になります**（未ビルドの `index.html` が公開される）
+3. `main` に push すると `.github/workflows/deploy.yml` が実行される
+4. **Actions** で「Deploy to GitHub Pages」が **成功**するまで待つ
+5. https://kg9n3n8y.github.io/anki_practice/ を開く（反映に 1〜2 分）
 
-ワークフローは `VITE_BASE_PATH=/${リポジトリ名}/` でビルドします。リポジトリ名を変えた場合は `.github/workflows/deploy.yml` の `VITE_BASE_PATH` も合わせて変更してください。
+**今すぐ直す手順（真っ白なとき）**
+
+1. **Settings → Pages → Source** を **GitHub Actions** に変更して Save
+2. **Actions** タブ → 「Deploy to GitHub Pages」→ **Run workflow**（または空コミットで push）
+3. 完了後、ブラウザで **スーパーリロード**（キャッシュ削除）
+
+**代替:** Source を **Deploy from a branch** にする場合は、ブランチ **`gh-pages`**・フォルダ **`/ (root)`** を選ぶ（ワークフローがビルド結果を `gh-pages` にも push します）。**`main` / root は選ばないでください。**
+
+ワークフローは `VITE_BASE_PATH=/${リポジトリ名}/` でビルドします。
 
 `username.github.io` リポジトリ（ユーザーサイト）の場合は `VITE_BASE_PATH=/` に変更します。
 

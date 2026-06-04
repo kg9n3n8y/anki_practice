@@ -29,13 +29,34 @@ jobs:
 
       - name: Build
         env:
-          # リポジトリ名に合わせて変更（user.github.io の場合は /）
           VITE_BASE_PATH: /${{ github.event.repository.name }}/
         run: npm run build
+
+      - name: Verify build output
+        run: |
+          if grep -q '/src/main.tsx' dist/index.html; then
+            echo "::error::dist/index.html が未ビルドのままです"
+            exit 1
+          fi
+          if ! grep -q "${{ github.event.repository.name }}/assets/" dist/index.html; then
+            echo "::error::dist/index.html に base path 付きアセットがありません"
+            cat dist/index.html
+            exit 1
+          fi
+          test -f dist/404.html
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
 
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
+          retention-days: 1
 
   deploy:
     needs: build
@@ -46,3 +67,21 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+
+  # Source が「branch / main / root」のとき用のフォールバック（gh-pages ブランチ）
+  deploy-gh-pages-branch:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+
+      - uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          force_orphan: true
