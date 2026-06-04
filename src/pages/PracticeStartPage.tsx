@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { fudalist } from "../data/fudalist";
 import {
   DEFAULT_PRACTICE_SETTINGS,
   cardCountOptions,
@@ -144,7 +143,6 @@ export function PracticeStartPage() {
           </Link>
         </div>
       </form>
-      <p className="app-placeholder">札データ: {fudalist.length} 首</p>
     </section>
   );
 }
