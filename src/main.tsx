@@ -1,19 +1,13 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-import { registerSW } from "virtual:pwa-register";
 import App from "./App.tsx";
+import { setupPwaRegistration } from "./lib/pwaRegistration";
 import { warmTorifudaCache } from "./lib/offlineImageCache";
 import "./index.css";
 
-registerSW({
-  immediate: true,
-  onRegistered() {
-    void warmTorifudaCache();
-  },
-  onOfflineReady() {
-    void warmTorifudaCache();
-  },
+setupPwaRegistration(() => {
+  void warmTorifudaCache();
 });
 
 const basename = import.meta.env.BASE_URL.replace(/\/$/, "") || "/";

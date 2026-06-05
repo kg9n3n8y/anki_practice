@@ -59,8 +59,11 @@ export default defineConfig(({ mode }) => {
         },
         workbox: {
           globPatterns: [
-            "**/*.{js,css,html,ico,svg,png,woff2,webmanifest}",
+            "**/*.{js,css,ico,svg,png,woff2,webmanifest}",
           ],
+          /** HTML はプリキャッシュしない（オンライン時は常にネットワーク優先） */
+          globIgnores: ["**/index.html", "**/404.html"],
+          cleanupOutdatedCaches: true,
           navigateFallback: "index.html",
           navigateFallbackDenylist: [
             /\/torifuda\//,
@@ -69,6 +72,18 @@ export default defineConfig(({ mode }) => {
           ],
           maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
           runtimeCaching: [
+            {
+              urlPattern: ({ request }) => request.mode === "navigate",
+              handler: "NetworkFirst",
+              options: {
+                cacheName: "html-document",
+                expiration: {
+                  maxEntries: 2,
+                  maxAgeSeconds: 60 * 60 * 24,
+                },
+                networkTimeoutSeconds: 5,
+              },
+            },
             {
               urlPattern: ({ url }) => url.pathname.includes("/torifuda/"),
               handler: "CacheFirst",
