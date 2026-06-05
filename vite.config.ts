@@ -26,6 +26,7 @@ export default defineConfig(({ mode }) => {
           "pwa-icon-192.png",
           "pwa-icon-512.png",
           "thumbnail.png",
+          "og-card.jpg",
         ],
         manifest: {
           name: "かるた暗記練",
@@ -59,7 +60,7 @@ export default defineConfig(({ mode }) => {
         },
         workbox: {
           globPatterns: [
-            "**/*.{js,css,ico,svg,png,woff2,webmanifest}",
+            "**/*.{js,css,ico,svg,png,jpg,jpeg,woff2,webmanifest}",
           ],
           /** HTML はプリキャッシュしない（オンライン時は常にネットワーク優先） */
           globIgnores: ["**/index.html", "**/404.html"],
