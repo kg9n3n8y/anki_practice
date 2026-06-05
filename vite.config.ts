@@ -19,7 +19,7 @@ export default defineConfig(({ mode }) => {
         },
       },
       VitePWA({
-        registerType: "autoUpdate",
+        registerType: "prompt",
         injectRegister: null,
         includeAssets: [
           "pwa-icon-180.png",

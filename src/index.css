@@ -678,6 +678,31 @@ button.secondary,
   line-height: 1.5;
 }
 
+.pwa-update-banner {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  width: 100%;
+  margin: 0;
+  padding: 0.65rem 1rem;
+  padding-bottom: max(0.65rem, env(safe-area-inset-bottom));
+  border: none;
+  border-radius: 0;
+  background: #1a472a;
+  color: #f5f0e6;
+  font: inherit;
+  font-size: 0.9rem;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.pwa-update-banner:active {
+  background: #143820;
+}
+
 .import-textarea {
   width: 100%;
   font: inherit;
