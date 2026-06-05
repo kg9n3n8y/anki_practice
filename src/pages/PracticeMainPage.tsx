@@ -289,7 +289,7 @@ export function PracticeMainPage() {
               disabled={answering}
               onClick={() => handleAnswer("none")}
             >
-              なし
+              空札
             </button>
           )}
         </div>

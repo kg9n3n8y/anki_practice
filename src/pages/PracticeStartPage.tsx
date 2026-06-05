@@ -101,7 +101,7 @@ export function PracticeStartPage() {
           </label>
 
           <label className="practice-field">
-            <span className="practice-field-label">自陣の定位置</span>
+            <span className="practice-field-label">自陣の配置</span>
             <span className="practice-field-select-wrap">
               <select
                 className="practice-field-select"
