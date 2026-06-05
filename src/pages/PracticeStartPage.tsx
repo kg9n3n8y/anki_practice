@@ -60,10 +60,16 @@ export function PracticeStartPage() {
       const next = { ...s, [key]: value };
       if (key === "mode") {
         const mode = value as PracticeMode;
+        const prevMode = s.mode;
         next.cardCount = defaultCardCountForMode(mode);
         next.emptyCardCount = defaultEmptyCardCountForMode(mode);
-        if (mode === "opponent") next.usePosition = false;
-        else if (!positionAvailable) next.usePosition = false;
+        if (mode === "opponent") {
+          next.usePosition = false;
+        } else if (!positionAvailable) {
+          next.usePosition = false;
+        } else if (prevMode === "opponent") {
+          next.usePosition = true;
+        }
       }
       return next;
     });
