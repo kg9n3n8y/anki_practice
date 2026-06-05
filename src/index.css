@@ -494,7 +494,7 @@ button.secondary,
   user-select: none;
 }
 
-/* 正解は文字「○」+ 縁取りだと二重に見えるため、単一の border 円で描画 */
+/* 正解は文字「○」+ 縁取りだと二重に見えるため、単一ストロークの SVG で描画 */
 .board-card-mark--correct {
   font-size: 0;
 }
@@ -504,9 +504,8 @@ button.secondary,
   display: block;
   width: calc(var(--fuda-w) * 0.78);
   aspect-ratio: 1;
-  border: calc(var(--fuda-w) * 0.065) solid rgba(204, 0, 0, 0.2);
-  border-radius: 50%;
-  box-sizing: border-box;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='42' fill='none' stroke='%23CC0000' stroke-opacity='0.2' stroke-width='11'/%3E%3C/svg%3E")
+    center / contain no-repeat;
 }
 
 .board-card-mark--incorrect {
@@ -514,7 +513,17 @@ button.secondary,
 }
 
 .board-card-mark--near {
-  color: rgba(26, 122, 26, 0.2);
+  font-size: 0;
+}
+
+/* 文字の△+縁取りだと二重に見えるため、単一ストロークの SVG で描画 */
+.board-card-mark--near::before {
+  content: "";
+  display: block;
+  width: calc(var(--fuda-w) * 0.78);
+  height: calc(var(--fuda-w) * 0.68);
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 87'%3E%3Cpath fill='none' stroke='%23FFCC00' stroke-opacity='0.5' stroke-width='13' stroke-linejoin='round' stroke-linecap='round' d='M50 8 L92 79 L8 79 Z'/%3E%3C/svg%3E")
+    center / contain no-repeat;
 }
 
 .board-card-btn:not(:disabled) {
