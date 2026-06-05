@@ -267,7 +267,16 @@ export function PracticeMainPage() {
 
   return (
     <div className="practice-main" style={boardStyle}>
-      <div className="practice-toolbar app-card practice-toolbar--split">
+      <div
+        className={[
+          "practice-toolbar app-card practice-toolbar--split",
+          phase === "confirm" &&
+            feedback &&
+            `practice-toolbar--feedback-${feedback}`,
+        ]
+          .filter(Boolean)
+          .join(" ")}
+      >
         <div className="practice-toolbar-left">
           {phase === "memorize" && (
             <button
@@ -301,15 +310,7 @@ export function PracticeMainPage() {
             </span>
           )}
           {phase === "confirm" && confirmRevealReady && currentQuestion && (
-            <strong
-              className={
-                feedback
-                  ? `confirm-kimariji confirm-kimariji--${feedback}`
-                  : "confirm-kimariji"
-              }
-              role="status"
-              aria-live="polite"
-            >
+            <strong className="confirm-kimariji" role="status" aria-live="polite">
               {currentQuestion.kimariji}
             </strong>
           )}

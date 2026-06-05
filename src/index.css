@@ -358,6 +358,19 @@ button.secondary,
   flex-wrap: nowrap;
   align-items: center;
   gap: 0.5rem;
+  transition: background-color 0.12s ease;
+}
+
+.practice-toolbar--feedback-correct {
+  background: #ffb3b3;
+}
+
+.practice-toolbar--feedback-incorrect {
+  background: #99ccff;
+}
+
+.practice-toolbar--feedback-near {
+  background: #ffe066;
 }
 
 .practice-toolbar--split {
@@ -410,19 +423,6 @@ button.secondary,
   line-height: 1.15;
   color: #1a472a;
   text-align: center;
-  transition: color 0.12s ease;
-}
-
-.confirm-kimariji--correct {
-  color: #c00;
-}
-
-.confirm-kimariji--incorrect {
-  color: #06c;
-}
-
-.confirm-kimariji--near {
-  color: #1a7a1a;
 }
 
 .karuta-board {
