@@ -9,6 +9,7 @@ import {
 } from "./areas";
 import { campCounts } from "./practiceDefaults";
 import { shuffle } from "./shuffle";
+import { pickSelfPoemsWithPosition } from "./positionSelection";
 import { emptyPositionState, poemOrderMap, stateFromPosition } from "./positionState";
 
 let cardSeq = 0;
@@ -254,9 +255,13 @@ export function generateBoard(
     settings.cardCount,
   );
 
-  const selected = pickRandomPoems(allPoems, oppCount + selfCount);
-  const opponentPoems = selected.slice(0, oppCount);
-  const selfPoems = selected.slice(oppCount);
+  const opponentPoems = pickRandomPoems(allPoems, oppCount);
+  const opponentNos = new Set(opponentPoems.map((p) => p.no));
+  const selfPool = allPoems.filter((p) => !opponentNos.has(p.no));
+  const selfPoems =
+    settings.usePosition && position
+      ? pickSelfPoemsWithPosition(selfPool, selfCount, position)
+      : pickRandomPoems(selfPool, selfCount);
 
   return {
     opponent: placeCamp(opponentPoems, position, false),
