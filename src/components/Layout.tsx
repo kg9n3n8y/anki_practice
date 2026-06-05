@@ -1,4 +1,5 @@
 import { Outlet, useLocation } from "react-router-dom";
+import { PwaUpdateBanner } from "./PwaUpdateBanner";
 
 export function Layout() {
   const { pathname } = useLocation();
@@ -18,6 +19,7 @@ export function Layout() {
       <main>
         <Outlet />
       </main>
+      <PwaUpdateBanner />
     </div>
   );
 }
