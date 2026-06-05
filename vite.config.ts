@@ -26,7 +26,6 @@ export default defineConfig(({ mode }) => {
           "pwa-icon-192.png",
           "pwa-icon-512.png",
           "thumbnail.png",
-          "og-card.jpg",
         ],
         manifest: {
           name: "かるた暗記練",
